@@ -1215,7 +1215,8 @@ libraries</p>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Step 3: Use <a href="/blurr/data-core.html#BlurrDataLoader"><code>BlurrDataLoader</code></a> to build Blurr friendly dataloaders from your datasets</p>
+<p>Step 3: Use <a href="/blurr/data-core.html#BlurrDataLoader"><code>BlurrDataLoader</code></a> to build Blurr friendly dataloaders from your datasets.</p>
+<p>Setting the <code>label_names</code> argument to a list of label names corresponding to each class's index will ensure the methods like <code>show_batch</code> and <code>show_results</code> print the name of the class rather than just its index.</p>
 
 </div>
 </div>
@@ -1285,7 +1286,7 @@ libraries</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>torch.Size([8, 64])</pre>
+<pre>torch.Size([8, 73])</pre>
 </div>
 
 </div>
@@ -1328,12 +1329,12 @@ libraries</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>" Frank Quattrone is innocent, " Keker said in a statement. Quattrone lawyer John W. Keker said his client is innocent.</td>
+      <td>That truck was spotted in the Campbells Creek area, fitting that description, Morris said. A black pickup truck was also seen in the Campbells Creek area, Morris said.</td>
       <td>equivalent</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Jim Eisenbrandt, Wittig's attorney, also was not available for comment immediately ; his secretary said he was reviewing the report. A secretary for James Eisenbrandt, Wittig's attorney, said Eisenbrandt was reviewing the report this morning.</td>
+      <td>Shares of GE were slipping 17 cents, or 0.6 %, to $ 28.02 in Instinet premarket trading. Shares in GE were down 7 cents to $ 28.12 by the close of trading in New York.</td>
       <td>not_equivalent</td>
     </tr>
   </tbody>
