@@ -427,81 +427,6 @@ transformers: 4.14.1
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class ChunkedTfmDL(TfmdDL):</span>
-<span class="c1">#     def __init__(self, dataset, bs=64, shuffle=False, num_workers=None, verbose=False, do_setup=True, **kwargs):</span>
-<span class="c1">#         super().__init__(dataset, bs=bs, shuffle=shuffle, num_workers=num_workers, verbose=verbose, do_setup=do_setup, **kwargs)</span>
-<span class="c1">#         self.batch_items = None</span>
-        
-<span class="c1">#     def create_batches(self, samps):</span>
-<span class="c1">#         if self.dataset is not None: self.it = iter(self.dataset)</span>
-<span class="c1">#         res = filter(lambda o:o is not None, map(self.do_item, samps))</span>
-        
-<span class="c1">#         for b in map(self.do_batch, self.chunkify(res)):</span>
-<span class="c1">#             while (self.n_batch_items() &gt;= self.bs):</span>
-<span class="c1">#                 yield self.get_batch() </span>
-
-<span class="c1">#     def do_batch(self, b):</span>
-<span class="c1">#         b = super().do_batch(b)</span>
-<span class="c1">#         self.add_batch(b)</span>
-
-<span class="c1">#     def add_batch(self, b):</span>
-<span class="c1">#         if not self.batch_items:</span>
-<span class="c1">#             self.batch_items = b</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             for i in range(len(b)):</span>
-<span class="c1">#                 if isinstance(b[i], dict):</span>
-<span class="c1">#                     for k in self.batch_items[i].keys():</span>
-<span class="c1">#                         self.batch_items[i][k] = torch.cat([self.batch_items[i][k], b[i][k]])</span>
-<span class="c1">#                 else:</span>
-<span class="c1">#                     self.batch_items[i].data = torch.cat([self.batch_items[i], b[i]])</span>
-
-<span class="c1">#         # update &quot;n&quot; to reflect the additional samples</span>
-<span class="c1">#         overflow_map = b[0][&quot;overflow_to_sample_mapping&quot;].numpy()</span>
-<span class="c1">#         self.n += np.sum([i - 1 for i in Counter(overflow_map).values()])</span>
-
-<span class="c1">#     def get_batch(self):</span>
-<span class="c1">#         chunked_batch = []</span>
-
-<span class="c1">#         for i in range(len(self.batch_items)):</span>
-<span class="c1">#             if isinstance(self.batch_items[i], dict):</span>
-<span class="c1">#                 chunked_d = {}</span>
-<span class="c1">#                 for k in self.batch_items[i].keys():</span>
-<span class="c1">#                     chunked_d[k] = self.batch_items[i][k][: self.bs]</span>
-<span class="c1">#                     self.batch_items[i][k] = self.batch_items[i][k][self.bs :]</span>
-
-<span class="c1">#                 chunked_batch.append(chunked_d)</span>
-<span class="c1">#             else:</span>
-<span class="c1">#                 chunked_batch.append(self.batch_items[i][: self.bs])</span>
-<span class="c1">#                 self.batch_items[i].data = self.batch_items[i][self.bs :]</span>
-
-<span class="c1">#         return tuplify(chunked_batch)</span>
-
-<span class="c1">#     def n_batch_items(self):</span>
-<span class="c1">#         return len(self.batch_items[0][&quot;input_ids&quot;]) if self.batch_items else 0</span>
-
-<span class="c1">#     def _one_pass(self):</span>
-<span class="c1">#         self.do_batch([self.do_item(0)])</span>
-<span class="c1">#         b = self.get_batch()</span>
-<span class="c1">#         if self.device is not None: b = to_device(b, self.device)</span>
-<span class="c1">#         its = self.after_batch(b)</span>
-<span class="c1">#         self._n_inp = 1 if not isinstance(its, (list,tuple)) or len(its)==1 else len(its)-1</span>
-<span class="c1">#         self._types = explode_types(its)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We'll return a <a href="/blurr/data-question-answering.html#HF_QuestionAnswerInput"><code>HF_QuestionAnswerInput</code></a> from our custom <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a> so that we can customize the show_batch/results methods for this task.</p>
@@ -509,133 +434,6 @@ transformers: 4.14.1
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class HF_QABeforeBatchTransform(HF_BeforeBatchTransform):</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     Handles everything you need to assemble a mini-batch of inputs and targets, as well as </span>
-<span class="c1">#     decode the dictionary produced as a byproduct of the tokenization process in the `encodes` method.</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     def __init__(</span>
-<span class="c1">#         self,</span>
-<span class="c1">#         # The abbreviation/name of your Hugging Face transformer architecture (e.b., bert, bart, etc..)</span>
-<span class="c1">#         hf_arch: str,</span>
-<span class="c1">#         # A specific configuration instance you want to use</span>
-<span class="c1">#         hf_config: PretrainedConfig,</span>
-<span class="c1">#         # A Hugging Face tokenizer</span>
-<span class="c1">#         hf_tokenizer: PreTrainedTokenizerBase,</span>
-<span class="c1">#         # A Hugging Face model</span>
-<span class="c1">#         hf_model: PreTrainedModel,</span>
-<span class="c1">#         # To control the length of the padding/truncation. It can be an integer or None,</span>
-<span class="c1">#         # in which case it will default to the maximum length the model can accept. If the model has no</span>
-<span class="c1">#         # specific maximum input length, truncation/padding to max_length is deactivated.</span>
-<span class="c1">#         # See [Everything you always wanted to know about padding and truncation](https://huggingface.co/transformers/preprocessing.html#everything-you-always-wanted-to-know-about-padding-and-truncation)</span>
-<span class="c1">#         max_length: int = None,</span>
-<span class="c1">#         # To control the `padding` applied to your `hf_tokenizer` during tokenization. If None, will default to</span>
-<span class="c1">#         # `False` or `&#39;do_not_pad&#39;.</span>
-<span class="c1">#         # See [Everything you always wanted to know about padding and truncation](https://huggingface.co/transformers/preprocessing.html#everything-you-always-wanted-to-know-about-padding-and-truncation)</span>
-<span class="c1">#         padding: Union[bool, str] = True,</span>
-<span class="c1">#         # To control `truncation` applied to your `hf_tokenizer` during tokenization. If None, will default to</span>
-<span class="c1">#         # `False` or `do_not_truncate`.</span>
-<span class="c1">#         # See [Everything you always wanted to know about padding and truncation](https://huggingface.co/transformers/preprocessing.html#everything-you-always-wanted-to-know-about-padding-and-truncation)</span>
-<span class="c1">#         truncation: Union[bool, str] = True,</span>
-<span class="c1">#         # The `is_split_into_words` argument applied to your `hf_tokenizer` during tokenization. Set this to `True`</span>
-<span class="c1">#         # if your inputs are pre-tokenized (not numericalized)</span>
-<span class="c1">#         is_split_into_words: bool = False,</span>
-<span class="c1">#         # Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs</span>
-<span class="c1">#         tok_kwargs={},</span>
-<span class="c1">#         # Keyword arguments to apply to `HF_BeforeBatchTransform`</span>
-<span class="c1">#         **kwargs</span>
-<span class="c1">#     ):</span>
-<span class="c1">#         super().__init__(</span>
-<span class="c1">#             hf_arch,</span>
-<span class="c1">#             hf_config,</span>
-<span class="c1">#             hf_tokenizer,</span>
-<span class="c1">#             hf_model,</span>
-<span class="c1">#             max_length=max_length,</span>
-<span class="c1">#             padding=padding,</span>
-<span class="c1">#             truncation=truncation,</span>
-<span class="c1">#             is_split_into_words=is_split_into_words,</span>
-<span class="c1">#             tok_kwargs=tok_kwargs,</span>
-<span class="c1">#             **kwargs</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#     def encodes(self, samples):</span>
-<span class="c1">#         samples = L(samples)</span>
-
-<span class="c1">#         # grab inputs</span>
-<span class="c1">#         if is_listy(samples[0][0]) and not self.is_split_into_words:</span>
-<span class="c1">#             inps = list(zip(samples.itemgot(0, 0), samples.itemgot(0, 1)))</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             inps = samples.itemgot(0).items</span>
-
-<span class="c1">#         # tokenize</span>
-<span class="c1">#         tok_d = self.hf_tokenizer(</span>
-<span class="c1">#             inps,</span>
-<span class="c1">#             max_length=self.max_length,</span>
-<span class="c1">#             padding=self.padding,</span>
-<span class="c1">#             truncation=self.truncation,</span>
-<span class="c1">#             is_split_into_words=self.is_split_into_words,</span>
-<span class="c1">#             return_tensors=&quot;pt&quot;,</span>
-<span class="c1">#             **self.tok_kwargs</span>
-<span class="c1">#         )</span>
-
-<span class="c1">#         d_keys = tok_d.keys()</span>
-
-<span class="c1">#         updated_samples = []</span>
-<span class="c1">#         for idx, seq_idx in enumerate(tok_d[&quot;overflow_to_sample_mapping&quot;]):</span>
-<span class="c1">#             # update each chunk with the correct start/end TensorCategories</span>
-<span class="c1">#             qst_mask = [i != 1 for i in tok_d.sequence_ids(idx)]</span>
-<span class="c1">#             start, end, has_ans = self.find_start_end(samples[seq_idx][1], tok_d[&quot;input_ids&quot;][idx], tok_d[&quot;offset_mapping&quot;][idx], qst_mask)</span>
-<span class="c1">#             start_t, end_t, has_ans_t = TensorCategory(start), TensorCategory(end), TensorCategory(has_ans)</span>
-
-<span class="c1">#             # create a new sample based on the overflow mappings, including the tokenized inputs (e.g. input_ids, attention_mask, etc...),</span>
-<span class="c1">#             # whether or not the question is answerable in the chunk, and if so, where the start/end tokens are</span>
-<span class="c1">#             s = (*[{k: tok_d[k][idx] for k in d_keys}], has_ans_t, start_t, end_t)</span>
-
-<span class="c1">#             # cls_index: location of CLS token (used by xlnet and xlm); is a list.index(value) for pytorch tensor&#39;s</span>
-<span class="c1">#             s[0][&quot;cls_index&quot;] = (s[0][&quot;input_ids&quot;] == self.hf_tokenizer.cls_token_id).nonzero()[0]</span>
-
-<span class="c1">#             # p_mask: mask with 1 for token than cannot be in the answer, else 0 (used by xlnet and xlm)</span>
-<span class="c1">#             s[0][&quot;p_mask&quot;] = s[0][&quot;special_tokens_mask&quot;]</span>
-
-<span class="c1">#             updated_samples.append(s)</span>
-
-<span class="c1">#         return updated_samples</span>
-
-<span class="c1">#     def find_start_end(self, ans_data, input_ids, offset_mapping, qst_mask):</span>
-<span class="c1">#         # mask the question tokens so they aren&#39;t included in the search</span>
-<span class="c1">#         masked_offset_mapping = offset_mapping.clone()</span>
-<span class="c1">#         masked_offset_mapping[qst_mask] = tensor([-100, -100])</span>
-
-<span class="c1">#         # based on the character start/end index, see if we can find the span of tokens in the `offset_mapping`</span>
-<span class="c1">#         start = torch.where((masked_offset_mapping[:, 0] == ans_data[1]) | (masked_offset_mapping[:, 1] == ans_data[1]))[0]</span>
-<span class="c1">#         end = torch.where((masked_offset_mapping[:, 0] &lt;= ans_data[2]) &amp; (masked_offset_mapping[:, 1] &gt;= ans_data[2]))[0]</span>
-
-<span class="c1">#         if len(start) &gt; 0 and len(end) &gt; 0:</span>
-<span class="c1">#             start = start[-1]</span>
-<span class="c1">#             end = end[-1]</span>
-
-<span class="c1">#             if end &lt; len(masked_offset_mapping):</span>
-<span class="c1">#                 return (start, end, tensor(1))</span>
-
-<span class="c1">#         # if neither star or end is found, or the end token is part of this chunk, consider the answer not found</span>
-<span class="c1">#         return (tensor(0), tensor(0), tensor(0))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -775,23 +573,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span> <span class="o">=</span> <span class="n">dblock</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">(</span><span class="n">squad_df</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">valid</span><span class="p">)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">valid</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -887,6 +669,29 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># for idx, b in enumerate(dls.valid):</span>
+<span class="c1">#     for input_ids, start_idx, end_idx in zip(b[0][&quot;input_ids&quot;], b[2], b[3]):</span>
+<span class="c1">#         print(hf_tokenizer.decode(input_ids))</span>
+<span class="c1">#         if start_idx.item() != 0:</span>
+<span class="c1">#             print(f&quot;*** Answer: {hf_tokenizer.decode(input_ids[start_idx:end_idx])} ***\n&quot;)</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             print(&quot;*** NO ANSWER ***&quot;)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -932,31 +737,31 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Which prominent star felt the 2009 Female Video of the Year award should have went to Beyoncé instead of Taylor Swift? Music Awards, the 2009 Scottish MOBO Awards, and the 2009 BET Awards. At the 2009 MTV Video Music Awards, the video was nominated for nine awards, ultimately winning three including Video of the Year. Its failure to win the Best Female Video category, which went to American country pop singer Taylor Swift's "You Belong with Me", led to Kanye West interrupting the ceremony and B</td>
-      <td>True</td>
-      <td>(96, 98)</td>
-      <td>Kanye West</td>
-    </tr>
-    <tr>
-      <th>1</th>
       <td>Which prominent star felt the 2009 Female Video of the Year award should have went to Beyoncé instead of Taylor Swift?, Beyoncé embarked on the I Am... World Tour, her second headlining worldwide concert tour, consisting of 108 shows, grossing $119.5 million.</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
+      <th>1</th>
+      <td>Who beat out Beyonce for Best Female Video? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copies in its firs</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
+    </tr>
+    <tr>
       <th>2</th>
-      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sell</td>
+      <td>Who beat out Beyonce for Best Female Video?, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman during the 2000s. It also included the successful "Sweet Dreams"</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>3</th>
-      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award?, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman d</td>
-      <td>True</td>
-      <td>(52, 54)</td>
-      <td>Single Ladies</td>
+      <td>Who beat out Beyonce for Best Female Video?Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the 2009 BET Awards. At the 2009 MTV Video Music Awards, the video was nominated for nine awards, u</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
     </tr>
   </tbody>
 </table>
@@ -983,57 +788,6 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_dls</span> <span class="o">=</span> <span class="n">dls</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">_types</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">_n_inp</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 </div>
  
 
