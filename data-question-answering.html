@@ -64,9 +64,9 @@ nb_path: "nbs/04_data-question-answering.ipynb"
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>What we&#39;re running with at the time this documentation was generated:
-torch: 1.10.0+cu102
+torch: 1.10.1+cu102
 fastai: 2.5.3
-transformers: 4.13.0
+transformers: 4.14.1
 </pre>
 </div>
 </div>
@@ -93,10 +93,87 @@ transformers: 4.13.0
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./&quot;</span><span class="p">)</span>
 <span class="n">squad_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;squad_sample.csv&quot;</span><span class="p">)</span>
-<span class="nb">len</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">squad_df</span><span class="p">))</span>
+<span class="n">squad_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1000
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>title</th>
+      <th>context</th>
+      <th>question</th>
+      <th>answers</th>
+      <th>ds_type</th>
+      <th>answer_text</th>
+      <th>is_impossible</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>train</td>
+      <td>in the late 1990s</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>56be85543aeaaa14008c9065</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
+      <td>train</td>
+      <td>singing and dancing</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -117,27 +194,13 @@ transformers: 4.13.0
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_cls</span> <span class="o">=</span> <span class="n">AutoModelForQuestionAnswering</span>
 
 <span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;roberta-base&quot;</span>  <span class="c1">#&#39;xlm-mlm-ende-1024&#39;</span>
 <span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span> <span class="o">=</span> <span class="n">BLURR</span><span class="o">.</span><span class="n">get_hf_objects</span><span class="p">(</span><span class="n">pretrained_model_name</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">model_cls</span><span class="p">)</span>
+
+<span class="n">max_seq_len</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">)))</span>
 </pre></div>
 
     </div>
@@ -147,6 +210,13 @@ transformers: 4.13.0
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>With version 2 of blurr, you now have the option of preprocessing your raw data as before using the <a href="/blurr/data-question-answering.html#pre_process_squad"><code>pre_process_squad</code></a> method (or somethign similar), as well as letting blurr handle everything including documents longer than the <code>max_len</code> or model will allow via splitting them into smaller chunks within those constraints.</p>
+
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -199,7 +269,7 @@ transformers: 4.13.0
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The <a href="/blurr/data-question-answering.html#pre_process_squad"><code>pre_process_squad</code></a> method is structured around how we've setup the squad DataFrame above.</p>
+<p>How to preprocess your data</p>
 
 </div>
 </div>
@@ -211,7 +281,7 @@ transformers: 4.13.0
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">pre_process_squad</span><span class="p">,</span> <span class="n">hf_arch</span><span class="o">=</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="o">=</span><span class="n">hf_tokenizer</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">pre_process_squad</span><span class="p">,</span> <span class="n">hf_arch</span><span class="o">=</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="o">=</span><span class="n">hf_tokenizer</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -228,50 +298,103 @@ transformers: 4.13.0
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">max_seq_len</span> <span class="o">=</span> <span class="mi">128</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="p">[(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">tok_answer_end</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">is_impossible</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)]</span>
+<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>title</th>
+      <th>context</th>
+      <th>question</th>
+      <th>answers</th>
+      <th>ds_type</th>
+      <th>answer_text</th>
+      <th>is_impossible</th>
+      <th>tokenized_input</th>
+      <th>tokenized_input_len</th>
+      <th>tok_answer_start</th>
+      <th>tok_answer_end</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>train</td>
+      <td>in the late 1990s</td>
+      <td>False</td>
+      <td>[&lt;s&gt;, ĠWhen, Ġdid, ĠBeyon, ce, Ġstart, Ġbecoming, Ġpopular, ?, &lt;/s&gt;, &lt;/s&gt;, ĠBeyon, cÃ©, ĠG, is, elle, ĠKnow, les, -, Carter, Ġ(/, bi, Ë, Ĳ, ËĪ, j, É, Ĵ, n, se, É, ª, /, Ġbee, -, Y, ON, -, say, ), Ġ(, born, ĠSeptember, Ġ4, ,, Ġ1981, ), Ġis, Ġan, ĠAmerican, Ġsinger, ,, Ġsong, writer, ,, Ġrecord, Ġproducer, Ġand, Ġactress, ., ĠBorn, Ġand, Ġraised, Ġin, ĠHouston, ,, ĠTexas, ,, Ġshe, Ġperformed, Ġin, Ġvarious, Ġsinging, Ġand, Ġdancing, Ġcompetitions, Ġas, Ġa, Ġchild, ,, Ġand, Ġrose, Ġto, Ġfame, Ġin, Ġthe, Ġlate, Ġ1990, s, Ġas, Ġlead, Ġsinger, Ġof, ĠR, &amp;, B, Ġgirl, -, group, ĠDestiny, ...]</td>
+      <td>185</td>
+      <td>84</td>
+      <td>89</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>56be85543aeaaa14008c9065</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
+      <td>train</td>
+      <td>singing and dancing</td>
+      <td>False</td>
+      <td>[&lt;s&gt;, ĠWhat, Ġareas, Ġdid, ĠBeyon, ce, Ġcompete, Ġin, Ġwhen, Ġshe, Ġwas, Ġgrowing, Ġup, ?, &lt;/s&gt;, &lt;/s&gt;, ĠBeyon, cÃ©, ĠG, is, elle, ĠKnow, les, -, Carter, Ġ(/, bi, Ë, Ĳ, ËĪ, j, É, Ĵ, n, se, É, ª, /, Ġbee, -, Y, ON, -, say, ), Ġ(, born, ĠSeptember, Ġ4, ,, Ġ1981, ), Ġis, Ġan, ĠAmerican, Ġsinger, ,, Ġsong, writer, ,, Ġrecord, Ġproducer, Ġand, Ġactress, ., ĠBorn, Ġand, Ġraised, Ġin, ĠHouston, ,, ĠTexas, ,, Ġshe, Ġperformed, Ġin, Ġvarious, Ġsinging, Ġand, Ġdancing, Ġcompetitions, Ġas, Ġa, Ġchild, ,, Ġand, Ġrose, Ġto, Ġfame, Ġin, Ġthe, Ġlate, Ġ1990, s, Ġas, Ġlead, Ġsinger, Ġof, ĠR, &amp;, ...]</td>
+      <td>190</td>
+      <td>77</td>
+      <td>80</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span> <span class="o">=</span> <span class="n">squad_df</span><span class="p">[(</span><span class="n">squad_df</span><span class="o">.</span><span class="n">tok_answer_end</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">squad_df</span><span class="o">.</span><span class="n">is_impossible</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)]</span>
-</pre></div>
-
-    </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Mid-level-API">Mid-level API<a class="anchor-link" href="#Mid-level-API"> </a></h3>
 </div>
 </div>
-
 </div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">vocab</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">)))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -304,6 +427,81 @@ transformers: 4.13.0
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class ChunkedTfmDL(TfmdDL):</span>
+<span class="c1">#     def __init__(self, dataset, bs=64, shuffle=False, num_workers=None, verbose=False, do_setup=True, **kwargs):</span>
+<span class="c1">#         super().__init__(dataset, bs=bs, shuffle=shuffle, num_workers=num_workers, verbose=verbose, do_setup=do_setup, **kwargs)</span>
+<span class="c1">#         self.batch_items = None</span>
+        
+<span class="c1">#     def create_batches(self, samps):</span>
+<span class="c1">#         if self.dataset is not None: self.it = iter(self.dataset)</span>
+<span class="c1">#         res = filter(lambda o:o is not None, map(self.do_item, samps))</span>
+        
+<span class="c1">#         for b in map(self.do_batch, self.chunkify(res)):</span>
+<span class="c1">#             while (self.n_batch_items() &gt;= self.bs):</span>
+<span class="c1">#                 yield self.get_batch() </span>
+
+<span class="c1">#     def do_batch(self, b):</span>
+<span class="c1">#         b = super().do_batch(b)</span>
+<span class="c1">#         self.add_batch(b)</span>
+
+<span class="c1">#     def add_batch(self, b):</span>
+<span class="c1">#         if not self.batch_items:</span>
+<span class="c1">#             self.batch_items = b</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             for i in range(len(b)):</span>
+<span class="c1">#                 if isinstance(b[i], dict):</span>
+<span class="c1">#                     for k in self.batch_items[i].keys():</span>
+<span class="c1">#                         self.batch_items[i][k] = torch.cat([self.batch_items[i][k], b[i][k]])</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     self.batch_items[i].data = torch.cat([self.batch_items[i], b[i]])</span>
+
+<span class="c1">#         # update &quot;n&quot; to reflect the additional samples</span>
+<span class="c1">#         overflow_map = b[0][&quot;overflow_to_sample_mapping&quot;].numpy()</span>
+<span class="c1">#         self.n += np.sum([i - 1 for i in Counter(overflow_map).values()])</span>
+
+<span class="c1">#     def get_batch(self):</span>
+<span class="c1">#         chunked_batch = []</span>
+
+<span class="c1">#         for i in range(len(self.batch_items)):</span>
+<span class="c1">#             if isinstance(self.batch_items[i], dict):</span>
+<span class="c1">#                 chunked_d = {}</span>
+<span class="c1">#                 for k in self.batch_items[i].keys():</span>
+<span class="c1">#                     chunked_d[k] = self.batch_items[i][k][: self.bs]</span>
+<span class="c1">#                     self.batch_items[i][k] = self.batch_items[i][k][self.bs :]</span>
+
+<span class="c1">#                 chunked_batch.append(chunked_d)</span>
+<span class="c1">#             else:</span>
+<span class="c1">#                 chunked_batch.append(self.batch_items[i][: self.bs])</span>
+<span class="c1">#                 self.batch_items[i].data = self.batch_items[i][self.bs :]</span>
+
+<span class="c1">#         return tuplify(chunked_batch)</span>
+
+<span class="c1">#     def n_batch_items(self):</span>
+<span class="c1">#         return len(self.batch_items[0][&quot;input_ids&quot;]) if self.batch_items else 0</span>
+
+<span class="c1">#     def _one_pass(self):</span>
+<span class="c1">#         self.do_batch([self.do_item(0)])</span>
+<span class="c1">#         b = self.get_batch()</span>
+<span class="c1">#         if self.device is not None: b = to_device(b, self.device)</span>
+<span class="c1">#         its = self.after_batch(b)</span>
+<span class="c1">#         self._n_inp = 1 if not isinstance(its, (list,tuple)) or len(its)==1 else len(its)-1</span>
+<span class="c1">#         self._types = explode_types(its)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We'll return a <a href="/blurr/data-question-answering.html#HF_QuestionAnswerInput"><code>HF_QuestionAnswerInput</code></a> from our custom <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a> so that we can customize the show_batch/results methods for this task.</p>
@@ -311,6 +509,133 @@ transformers: 4.13.0
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># class HF_QABeforeBatchTransform(HF_BeforeBatchTransform):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Handles everything you need to assemble a mini-batch of inputs and targets, as well as </span>
+<span class="c1">#     decode the dictionary produced as a byproduct of the tokenization process in the `encodes` method.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+
+<span class="c1">#     def __init__(</span>
+<span class="c1">#         self,</span>
+<span class="c1">#         # The abbreviation/name of your Hugging Face transformer architecture (e.b., bert, bart, etc..)</span>
+<span class="c1">#         hf_arch: str,</span>
+<span class="c1">#         # A specific configuration instance you want to use</span>
+<span class="c1">#         hf_config: PretrainedConfig,</span>
+<span class="c1">#         # A Hugging Face tokenizer</span>
+<span class="c1">#         hf_tokenizer: PreTrainedTokenizerBase,</span>
+<span class="c1">#         # A Hugging Face model</span>
+<span class="c1">#         hf_model: PreTrainedModel,</span>
+<span class="c1">#         # To control the length of the padding/truncation. It can be an integer or None,</span>
+<span class="c1">#         # in which case it will default to the maximum length the model can accept. If the model has no</span>
+<span class="c1">#         # specific maximum input length, truncation/padding to max_length is deactivated.</span>
+<span class="c1">#         # See [Everything you always wanted to know about padding and truncation](https://huggingface.co/transformers/preprocessing.html#everything-you-always-wanted-to-know-about-padding-and-truncation)</span>
+<span class="c1">#         max_length: int = None,</span>
+<span class="c1">#         # To control the `padding` applied to your `hf_tokenizer` during tokenization. If None, will default to</span>
+<span class="c1">#         # `False` or `&#39;do_not_pad&#39;.</span>
+<span class="c1">#         # See [Everything you always wanted to know about padding and truncation](https://huggingface.co/transformers/preprocessing.html#everything-you-always-wanted-to-know-about-padding-and-truncation)</span>
+<span class="c1">#         padding: Union[bool, str] = True,</span>
+<span class="c1">#         # To control `truncation` applied to your `hf_tokenizer` during tokenization. If None, will default to</span>
+<span class="c1">#         # `False` or `do_not_truncate`.</span>
+<span class="c1">#         # See [Everything you always wanted to know about padding and truncation](https://huggingface.co/transformers/preprocessing.html#everything-you-always-wanted-to-know-about-padding-and-truncation)</span>
+<span class="c1">#         truncation: Union[bool, str] = True,</span>
+<span class="c1">#         # The `is_split_into_words` argument applied to your `hf_tokenizer` during tokenization. Set this to `True`</span>
+<span class="c1">#         # if your inputs are pre-tokenized (not numericalized)</span>
+<span class="c1">#         is_split_into_words: bool = False,</span>
+<span class="c1">#         # Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs</span>
+<span class="c1">#         tok_kwargs={},</span>
+<span class="c1">#         # Keyword arguments to apply to `HF_BeforeBatchTransform`</span>
+<span class="c1">#         **kwargs</span>
+<span class="c1">#     ):</span>
+<span class="c1">#         super().__init__(</span>
+<span class="c1">#             hf_arch,</span>
+<span class="c1">#             hf_config,</span>
+<span class="c1">#             hf_tokenizer,</span>
+<span class="c1">#             hf_model,</span>
+<span class="c1">#             max_length=max_length,</span>
+<span class="c1">#             padding=padding,</span>
+<span class="c1">#             truncation=truncation,</span>
+<span class="c1">#             is_split_into_words=is_split_into_words,</span>
+<span class="c1">#             tok_kwargs=tok_kwargs,</span>
+<span class="c1">#             **kwargs</span>
+<span class="c1">#         )</span>
+
+<span class="c1">#     def encodes(self, samples):</span>
+<span class="c1">#         samples = L(samples)</span>
+
+<span class="c1">#         # grab inputs</span>
+<span class="c1">#         if is_listy(samples[0][0]) and not self.is_split_into_words:</span>
+<span class="c1">#             inps = list(zip(samples.itemgot(0, 0), samples.itemgot(0, 1)))</span>
+<span class="c1">#         else:</span>
+<span class="c1">#             inps = samples.itemgot(0).items</span>
+
+<span class="c1">#         # tokenize</span>
+<span class="c1">#         tok_d = self.hf_tokenizer(</span>
+<span class="c1">#             inps,</span>
+<span class="c1">#             max_length=self.max_length,</span>
+<span class="c1">#             padding=self.padding,</span>
+<span class="c1">#             truncation=self.truncation,</span>
+<span class="c1">#             is_split_into_words=self.is_split_into_words,</span>
+<span class="c1">#             return_tensors=&quot;pt&quot;,</span>
+<span class="c1">#             **self.tok_kwargs</span>
+<span class="c1">#         )</span>
+
+<span class="c1">#         d_keys = tok_d.keys()</span>
+
+<span class="c1">#         updated_samples = []</span>
+<span class="c1">#         for idx, seq_idx in enumerate(tok_d[&quot;overflow_to_sample_mapping&quot;]):</span>
+<span class="c1">#             # update each chunk with the correct start/end TensorCategories</span>
+<span class="c1">#             qst_mask = [i != 1 for i in tok_d.sequence_ids(idx)]</span>
+<span class="c1">#             start, end, has_ans = self.find_start_end(samples[seq_idx][1], tok_d[&quot;input_ids&quot;][idx], tok_d[&quot;offset_mapping&quot;][idx], qst_mask)</span>
+<span class="c1">#             start_t, end_t, has_ans_t = TensorCategory(start), TensorCategory(end), TensorCategory(has_ans)</span>
+
+<span class="c1">#             # create a new sample based on the overflow mappings, including the tokenized inputs (e.g. input_ids, attention_mask, etc...),</span>
+<span class="c1">#             # whether or not the question is answerable in the chunk, and if so, where the start/end tokens are</span>
+<span class="c1">#             s = (*[{k: tok_d[k][idx] for k in d_keys}], has_ans_t, start_t, end_t)</span>
+
+<span class="c1">#             # cls_index: location of CLS token (used by xlnet and xlm); is a list.index(value) for pytorch tensor&#39;s</span>
+<span class="c1">#             s[0][&quot;cls_index&quot;] = (s[0][&quot;input_ids&quot;] == self.hf_tokenizer.cls_token_id).nonzero()[0]</span>
+
+<span class="c1">#             # p_mask: mask with 1 for token than cannot be in the answer, else 0 (used by xlnet and xlm)</span>
+<span class="c1">#             s[0][&quot;p_mask&quot;] = s[0][&quot;special_tokens_mask&quot;]</span>
+
+<span class="c1">#             updated_samples.append(s)</span>
+
+<span class="c1">#         return updated_samples</span>
+
+<span class="c1">#     def find_start_end(self, ans_data, input_ids, offset_mapping, qst_mask):</span>
+<span class="c1">#         # mask the question tokens so they aren&#39;t included in the search</span>
+<span class="c1">#         masked_offset_mapping = offset_mapping.clone()</span>
+<span class="c1">#         masked_offset_mapping[qst_mask] = tensor([-100, -100])</span>
+
+<span class="c1">#         # based on the character start/end index, see if we can find the span of tokens in the `offset_mapping`</span>
+<span class="c1">#         start = torch.where((masked_offset_mapping[:, 0] == ans_data[1]) | (masked_offset_mapping[:, 1] == ans_data[1]))[0]</span>
+<span class="c1">#         end = torch.where((masked_offset_mapping[:, 0] &lt;= ans_data[2]) &amp; (masked_offset_mapping[:, 1] &gt;= ans_data[2]))[0]</span>
+
+<span class="c1">#         if len(start) &gt; 0 and len(end) &gt; 0:</span>
+<span class="c1">#             start = start[-1]</span>
+<span class="c1">#             end = end[-1]</span>
+
+<span class="c1">#             if end &lt; len(masked_offset_mapping):</span>
+<span class="c1">#                 return (start, end, tensor(1))</span>
+
+<span class="c1">#         # if neither star or end is found, or the end token is part of this chunk, consider the answer not found</span>
+<span class="c1">#         return (tensor(0), tensor(0), tensor(0))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -322,7 +647,7 @@ transformers: 4.13.0
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L72" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
+<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L72" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -404,19 +729,32 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">hf_model</span><span class="p">,</span>
     <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">,</span>
     <span class="n">truncation</span><span class="o">=</span><span class="s2">&quot;only_second&quot;</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_special_tokens_mask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_special_tokens_mask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;return_offsets_mapping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
 <span class="p">)</span>
 
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HF_TextBlock</span><span class="p">(</span><span class="n">before_batch_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">HF_QuestionAnswerInput</span><span class="p">),</span>
+    <span class="kc">None</span><span class="p">,</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
 <span class="p">)</span>
 
+
+<span class="k">def</span> <span class="nf">get_ans</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">)[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">answer_text</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">answer_text</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_dummy_cat</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
     <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
     <span class="n">get_x</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">context</span><span class="p">),</span>
-    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;tok_answer_start&quot;</span><span class="p">),</span> <span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;tok_answer_end&quot;</span><span class="p">)],</span>
+    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">get_ans</span><span class="p">,</span> <span class="n">get_dummy_cat</span><span class="p">,</span> <span class="n">get_dummy_cat</span><span class="p">],</span>
     <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">(),</span>
     <span class="n">n_inp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
@@ -453,11 +791,60 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">valid</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(200, 50)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">dls</span><span class="o">.</span><span class="n">one_batch</span><span class="p">()</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(4, 7, 4, 4)</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -475,6 +862,22 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(torch.Size([4, 128]), torch.Size([4, 128]), torch.Size([4]), torch.Size([4]))</pre>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -502,10 +905,65 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">=</span><span class="n">dls</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">trunc_at</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">=</span><span class="n">dls</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">trunc_at</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>found</th>
+      <th>start/end</th>
+      <th>answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Which prominent star felt the 2009 Female Video of the Year award should have went to Beyoncé instead of Taylor Swift? Music Awards, the 2009 Scottish MOBO Awards, and the 2009 BET Awards. At the 2009 MTV Video Music Awards, the video was nominated for nine awards, ultimately winning three including Video of the Year. Its failure to win the Best Female Video category, which went to American country pop singer Taylor Swift's "You Belong with Me", led to Kanye West interrupting the ceremony and B</td>
+      <td>True</td>
+      <td>(96, 98)</td>
+      <td>Kanye West</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Which prominent star felt the 2009 Female Video of the Year award should have went to Beyoncé instead of Taylor Swift?, Beyoncé embarked on the I Am... World Tour, her second headlining worldwide concert tour, consisting of 108 shows, grossing $119.5 million.</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sell</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award?, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman d</td>
+      <td>True</td>
+      <td>(52, 54)</td>
+      <td>Single Ladies</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -525,6 +983,57 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_dls</span> <span class="o">=</span> <span class="n">dls</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">_types</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">_n_inp</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 
