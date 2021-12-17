@@ -6,8 +6,8 @@ title: data.question_answering
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "This module contains the bits required to use the fastai DataBlock API and/or mid-level data processing pipelines to organize your data for question/answering tasks."
-description: "This module contains the bits required to use the fastai DataBlock API and/or mid-level data processing pipelines to organize your data for question/answering tasks."
+summary: "Question/Answering tasks are models that require two text inputs (a context that includes the answer and the question).  The objective is to predict the start/end tokens of the answer in the context). This module contains the bits required to use the fastai DataBlock API and/or mid-level data processing pipelines to organize your data for question/answering tasks."
+description: "Question/Answering tasks are models that require two text inputs (a context that includes the answer and the question).  The objective is to predict the start/end tokens of the answer in the context). This module contains the bits required to use the fastai DataBlock API and/or mid-level data processing pipelines to organize your data for question/answering tasks."
 nb_path: "nbs/04_data-question-answering.ipynb"
 ---
 <!--
@@ -79,7 +79,7 @@ transformers: 4.14.1
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Question/Answering-tokenization,-batch-transform,-and-DataBlock-methods">Question/Answering tokenization, batch transform, and DataBlock methods<a class="anchor-link" href="#Question/Answering-tokenization,-batch-transform,-and-DataBlock-methods"> </a></h2><p>Question/Answering tasks are models that require two text inputs (a context that includes the answer and the question).  The objective is to predict the start/end tokens of the answer in the context)</p>
+<h2 id="Setup">Setup<a class="anchor-link" href="#Setup"> </a></h2><p>We'll use a subset of <code>squad_v2</code> to demonstrate how to configure your blurr code for extractive question answering</p>
 
 </div>
 </div>
@@ -91,8 +91,39 @@ transformers: 4.14.1
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./&quot;</span><span class="p">)</span>
-<span class="n">squad_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;squad_sample.csv&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span> <span class="n">train_ds</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;squad_v2&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;train[:1000]&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Reusing dataset squad_v2 (/home/wgilliam/.cache/huggingface/datasets/squad_v2/squad_v2/2.0.0/ba48bc29b974701e9ba8d80ac94f3e3df924aba41b764dcf9851debea7c672e4)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">train_ds</span><span class="p">)</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">squad_df</span><span class="p">))</span>
 <span class="n">squad_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
@@ -134,38 +165,29 @@ transformers: 4.14.1
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>id</th>
-      <th>title</th>
-      <th>context</th>
-      <th>question</th>
       <th>answers</th>
-      <th>ds_type</th>
-      <th>answer_text</th>
-      <th>is_impossible</th>
+      <th>context</th>
+      <th>id</th>
+      <th>question</th>
+      <th>title</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>56be85543aeaaa14008c9063</td>
-      <td>Beyoncé</td>
+      <td>{'answer_start': [269], 'text': ['in the late 1990s']}</td>
       <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>56be85543aeaaa14008c9063</td>
       <td>When did Beyonce start becoming popular?</td>
-      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
-      <td>train</td>
-      <td>in the late 1990s</td>
-      <td>False</td>
+      <td>Beyoncé</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>56be85543aeaaa14008c9065</td>
-      <td>Beyoncé</td>
+      <td>{'answer_start': [207], 'text': ['singing and dancing']}</td>
       <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>56be85543aeaaa14008c9065</td>
       <td>What areas did Beyonce compete in when she was growing up?</td>
-      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
-      <td>train</td>
-      <td>singing and dancing</td>
-      <td>False</td>
+      <td>Beyoncé</td>
     </tr>
   </tbody>
 </table>
@@ -180,13 +202,6 @@ transformers: 4.14.1
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We've provided a simple subset of a pre-processed SQUADv2 dataset below just for demonstration purposes. There is a lot that can be done to make this much better and more fully functional.  The idea here is just to show you how things can work for tasks beyond sequence classification.</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -212,7 +227,7 @@ transformers: 4.14.1
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>With version 2 of blurr, you now have the option of preprocessing your raw data as before using the <a href="/blurr/data-question-answering.html#pre_process_squad"><code>pre_process_squad</code></a> method (or somethign similar), as well as letting blurr handle everything including documents longer than the <code>max_len</code> or model will allow via splitting them into smaller chunks within those constraints.</p>
+<h2 id="Utility-methods">Utility methods<a class="anchor-link" href="#Utility-methods"> </a></h2><p>Starting with version 2.0.0, blurr provides a <a href="/blurr/data-question-answering.html#find_answer_token_idxs"><code>find_answer_token_idxs</code></a> method that can be used in preprocessing your raw dataset beforehand, or on the fly.  It returns tensors indicating the start/end token indicies and one indicating whether the answer can be found in the provided set of <code>input_ids</code>.</p>
 
 </div>
 </div>
@@ -235,11 +250,60 @@ transformers: 4.14.1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="pre_process_squad" class="doc_header"><code>pre_process_squad</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L24" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pre_process_squad</code>(<strong><code>row</code></strong>, <strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>)</p>
+<h4 id="find_answer_token_idxs" class="doc_header"><code>find_answer_token_idxs</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L25" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_answer_token_idxs</code>(<strong><code>ans_data</code></strong>, <strong><code>input_ids</code></strong>, <strong><code>offset_mapping</code></strong>, <strong><code>qst_mask</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong><code>row</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em> <p>A row in your pd.DataFrame</p></li>
+<li><p><strong><code>ans_data</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>input_ids</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>offset_mapping</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>qst_mask</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Preprocessing-methods">Preprocessing methods<a class="anchor-link" href="#Preprocessing-methods"> </a></h2><p>With version 2.0.0 of blurr, we include a generalized preprocessing function you can use for finding the start/end token indicies based on your tokenizer of choice</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="pre_process_qa" class="doc_header"><code>pre_process_qa</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L49" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pre_process_qa</code>(<strong><code>raw_df</code></strong>, <strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>, <strong><code>ans_start_char_idx</code></strong>:<code>str</code>=<em><code>'ans_start_char_idx'</code></em>, <strong><code>ans_end_char_idx</code></strong>:<code>str</code>=<em><code>'ans_end_char_idx'</code></em>, <strong><code>keep_cols</code></strong>:<code>list</code>=<em><code>[]</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'return_overflowing_tokens': True}</code></em>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>raw_df</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em>  <p>Your pd.DataFrame</p></li>
 </ul>
 <ul>
 <li><strong><code>hf_arch</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>    <p>The abbreviation/name of your Hugging Face transformer architecture (e.b., bert, bart, etc..)</p></li>
@@ -255,6 +319,18 @@ transformers: 4.14.1
 </ul>
 <ul>
 <li><strong><code>ans_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the actual answer (default: 'answer_text')</p></li>
+</ul>
+<ul>
+<li><strong><code>ans_start_char_idx</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>The attribute in your dataset that contains the actual answer (default: 'answer_text')</p></li>
+</ul>
+<ul>
+<li><strong><code>ans_end_char_idx</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the actual answer (default: 'answer_text')</p></li>
+</ul>
+<ul>
+<li><strong><code>keep_cols</code></strong> : <em><code>&lt;class 'list'&gt;</code></em>, <em>optional</em> <p>Other column data from the raw DataFrame you want to include in the processed DataFrame</p></li>
+</ul>
+<ul>
+<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any keyword arguments you want your Hugging Face tokenizer to use during tokenization</p></li>
 </ul>
 
 </div>
@@ -281,25 +357,12 @@ transformers: 4.14.1
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">partial</span><span class="p">(</span><span class="n">pre_process_squad</span><span class="p">,</span> <span class="n">hf_arch</span><span class="o">=</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="o">=</span><span class="n">hf_tokenizer</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;ans_start_char_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">answers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;answer_start&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;answer_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">answers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;ans_end_char_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;ans_start_char_idx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;answer_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span>
 
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="p">[(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">tok_answer_end</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">is_impossible</span> <span class="o">==</span> <span class="kc">False</span><span class="p">)]</span>
-<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">squad_df</span><span class="p">))</span>
+<span class="n">squad_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -308,6 +371,14 @@ transformers: 4.14.1
 
 <div class="output_wrapper">
 <div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1000
+</pre>
+</div>
+</div>
 
 <div class="output_area">
 
@@ -331,50 +402,286 @@ transformers: 4.14.1
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>id</th>
-      <th>title</th>
-      <th>context</th>
-      <th>question</th>
       <th>answers</th>
-      <th>ds_type</th>
+      <th>context</th>
+      <th>id</th>
+      <th>question</th>
+      <th>title</th>
+      <th>ans_start_char_idx</th>
       <th>answer_text</th>
-      <th>is_impossible</th>
-      <th>tokenized_input</th>
-      <th>tokenized_input_len</th>
-      <th>tok_answer_start</th>
-      <th>tok_answer_end</th>
+      <th>ans_end_char_idx</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>56be85543aeaaa14008c9063</td>
-      <td>Beyoncé</td>
+      <td>{'answer_start': [269], 'text': ['in the late 1990s']}</td>
       <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>56be85543aeaaa14008c9063</td>
       <td>When did Beyonce start becoming popular?</td>
-      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
-      <td>train</td>
+      <td>Beyoncé</td>
+      <td>269</td>
       <td>in the late 1990s</td>
-      <td>False</td>
-      <td>[&lt;s&gt;, ĠWhen, Ġdid, ĠBeyon, ce, Ġstart, Ġbecoming, Ġpopular, ?, &lt;/s&gt;, &lt;/s&gt;, ĠBeyon, cÃ©, ĠG, is, elle, ĠKnow, les, -, Carter, Ġ(/, bi, Ë, Ĳ, ËĪ, j, É, Ĵ, n, se, É, ª, /, Ġbee, -, Y, ON, -, say, ), Ġ(, born, ĠSeptember, Ġ4, ,, Ġ1981, ), Ġis, Ġan, ĠAmerican, Ġsinger, ,, Ġsong, writer, ,, Ġrecord, Ġproducer, Ġand, Ġactress, ., ĠBorn, Ġand, Ġraised, Ġin, ĠHouston, ,, ĠTexas, ,, Ġshe, Ġperformed, Ġin, Ġvarious, Ġsinging, Ġand, Ġdancing, Ġcompetitions, Ġas, Ġa, Ġchild, ,, Ġand, Ġrose, Ġto, Ġfame, Ġin, Ġthe, Ġlate, Ġ1990, s, Ġas, Ġlead, Ġsinger, Ġof, ĠR, &amp;, B, Ġgirl, -, group, ĠDestiny, ...]</td>
-      <td>185</td>
-      <td>84</td>
-      <td>89</td>
+      <td>286</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>56be85543aeaaa14008c9065</td>
-      <td>Beyoncé</td>
+      <td>{'answer_start': [207], 'text': ['singing and dancing']}</td>
       <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>56be85543aeaaa14008c9065</td>
       <td>What areas did Beyonce compete in when she was growing up?</td>
-      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
-      <td>train</td>
+      <td>Beyoncé</td>
+      <td>207</td>
       <td>singing and dancing</td>
-      <td>False</td>
-      <td>[&lt;s&gt;, ĠWhat, Ġareas, Ġdid, ĠBeyon, ce, Ġcompete, Ġin, Ġwhen, Ġshe, Ġwas, Ġgrowing, Ġup, ?, &lt;/s&gt;, &lt;/s&gt;, ĠBeyon, cÃ©, ĠG, is, elle, ĠKnow, les, -, Carter, Ġ(/, bi, Ë, Ĳ, ËĪ, j, É, Ĵ, n, se, É, ª, /, Ġbee, -, Y, ON, -, say, ), Ġ(, born, ĠSeptember, Ġ4, ,, Ġ1981, ), Ġis, Ġan, ĠAmerican, Ġsinger, ,, Ġsong, writer, ,, Ġrecord, Ġproducer, Ġand, Ġactress, ., ĠBorn, Ġand, Ġraised, Ġin, ĠHouston, ,, ĠTexas, ,, Ġshe, Ġperformed, Ġin, Ġvarious, Ġsinging, Ġand, Ġdancing, Ġcompetitions, Ġas, Ġa, Ġchild, ,, Ġand, Ġrose, Ġto, Ġfame, Ġin, Ġthe, Ġlate, Ġ1990, s, Ġas, Ġlead, Ġsinger, Ġof, ĠR, &amp;, ...]</td>
-      <td>190</td>
-      <td>77</td>
-      <td>80</td>
+      <td>226</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span> <span class="o">=</span> <span class="n">pre_process_qa</span><span class="p">(</span>
+    <span class="n">squad_df</span><span class="p">,</span>
+    <span class="n">hf_arch</span><span class="p">,</span>
+    <span class="n">hf_tokenizer</span><span class="p">,</span>
+    <span class="n">keep_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">],</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc_df</span><span class="p">))</span>
+<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2189
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>question</th>
+      <th>context</th>
+      <th>answer_text</th>
+      <th>has_answer</th>
+      <th>ans_start_token_idx</th>
+      <th>ans_end_token_idx</th>
+      <th>ans_start_char_idx</th>
+      <th>ans_end_char_idx</th>
+      <th>id</th>
+      <th>title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>in the late 1990s</td>
+      <td>1</td>
+      <td>84</td>
+      <td>89</td>
+      <td>269</td>
+      <td>287</td>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>in the late 1990s</td>
+      <td>1</td>
+      <td>84</td>
+      <td>89</td>
+      <td>269</td>
+      <td>287</td>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sampled_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sampled_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">test_example</span> <span class="o">=</span> <span class="n">row</span>
+    <span class="n">tok_d</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">test_example</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">test_example</span><span class="o">.</span><span class="n">has_answer</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># print(test_example.answer_text.strip())</span>
+        <span class="c1"># print(hf_tokenizer.decode(tok_d[&quot;input_ids&quot;][test_example.ans_start_token_idx : test_example.ans_end_token_idx]).strip())</span>
+        <span class="n">test_eq</span><span class="p">(</span>
+            <span class="n">test_example</span><span class="o">.</span><span class="n">answer_text</span><span class="p">,</span>
+            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tok_d</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">test_eq</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">test_eq</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you want to remove texts longer than your model will hold (and include only answerable contexts)</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc2_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="p">[(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">has_answer</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc2_df</span><span class="p">))</span>
+<span class="n">proc2_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1480
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>question</th>
+      <th>context</th>
+      <th>answer_text</th>
+      <th>has_answer</th>
+      <th>ans_start_token_idx</th>
+      <th>ans_end_token_idx</th>
+      <th>ans_start_char_idx</th>
+      <th>ans_end_char_idx</th>
+      <th>id</th>
+      <th>title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>in the late 1990s</td>
+      <td>1</td>
+      <td>84</td>
+      <td>89</td>
+      <td>269</td>
+      <td>287</td>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>in the late 1990s</td>
+      <td>1</td>
+      <td>84</td>
+      <td>89</td>
+      <td>269</td>
+      <td>287</td>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
     </tr>
   </tbody>
 </table>
@@ -391,7 +698,7 @@ transformers: 4.14.1
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Mid-level-API">Mid-level API<a class="anchor-link" href="#Mid-level-API"> </a></h3>
+<h2 id="Mid-level-API">Mid-level API<a class="anchor-link" href="#Mid-level-API"> </a></h2>
 </div>
 </div>
 </div>
@@ -406,7 +713,7 @@ transformers: 4.14.1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L67" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
+<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L124" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -427,13 +734,6 @@ transformers: 4.14.1
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We'll return a <a href="/blurr/data-question-answering.html#HF_QuestionAnswerInput"><code>HF_QuestionAnswerInput</code></a> from our custom <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a> so that we can customize the show_batch/results methods for this task.</p>
-
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -445,7 +745,7 @@ transformers: 4.14.1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L72" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
+<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L129" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -506,10 +806,306 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 </div>
     {% endraw %}
 
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_ans_and_start_end_char_idxs" class="doc_header"><code>get_ans_and_start_end_char_idxs</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_ans_and_start_end_char_idxs</code>(<strong><code>r</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>r</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_markdown rendered_html output_subarea ">
+<h4 id="get_dummy_token_idx" class="doc_header"><code>get_dummy_token_idx</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L158" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dummy_token_idx</code>(<strong><code>r</code></strong>)</p>
+</blockquote>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><strong><code>r</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>By overriding <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a> we can add other inputs to each example for this particular task.</p>
+<h3 id="Using-a-pre-processed-dataset">Using a pre-processed dataset<a class="anchor-link" href="#Using-a-pre-processed-dataset"> </a></h3>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
 
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">HF_QABeforeBatchTransform</span><span class="p">(</span>
+    <span class="n">hf_arch</span><span class="p">,</span>
+    <span class="n">hf_config</span><span class="p">,</span>
+    <span class="n">hf_tokenizer</span><span class="p">,</span>
+    <span class="n">hf_model</span><span class="p">,</span>
+    <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">,</span>
+    <span class="n">truncation</span><span class="o">=</span><span class="s2">&quot;only_second&quot;</span><span class="p">,</span>
+    <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_special_tokens_mask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;return_offsets_mapping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">HF_TextBlock</span><span class="p">(</span><span class="n">before_batch_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">HF_QuestionAnswerInput</span><span class="p">),</span>
+    <span class="kc">None</span><span class="p">,</span>
+    <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
+    <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
+    <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
+    <span class="n">get_x</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">context</span><span class="p">),</span>
+    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">get_ans_and_start_end_char_idxs</span><span class="p">,</span> <span class="n">get_dummy_token_idx</span><span class="p">,</span> <span class="n">get_dummy_token_idx</span><span class="p">],</span>
+    <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">(),</span>
+    <span class="n">n_inp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span> <span class="o">=</span> <span class="n">dblock</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">(</span><span class="n">squad_df</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">valid</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(200, 50)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">b</span> <span class="o">=</span> <span class="n">dls</span><span class="o">.</span><span class="n">one_batch</span><span class="p">()</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(4, 6, 4, 4)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;attention_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(torch.Size([4, 128]), torch.Size([4, 128]), torch.Size([4]), torch.Size([4]))</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The <code>show_batch</code> method above allows us to create a more interpretable view of our question/answer data.</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">=</span><span class="n">dls</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">trunc_at</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>text</th>
+      <th>found</th>
+      <th>start/end</th>
+      <th>answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>What did Beyonce and Rowland found in 2005? After Hurricane Katrina in 2005, Beyoncé and Rowland founded the Survivor Foundation to provide transitional housing for victims in the Houston area, to which Beyoncé contributed an initial $250,000. The foundation has since expanded to work with other charities in the city, and also provided relief following Hurricane Ike three years later.</td>
+      <td>True</td>
+      <td>(26, 29)</td>
+      <td>the Survivor Foundation</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>What instruments did Chopin's father play? In October 1810, six months after Fryderyk's birth, the family moved to Warsaw, where his father acquired a post teaching French at the Warsaw Lyceum, then housed in the Saxon Palace. Fryderyk lived with his family in the Palace grounds. The father played the flute and violin; the mother played the piano and gave lessons to boys in the boarding house that the Chopins kept. Chopin was of slight build, and even in early childhood was prone to illnesses.</td>
+      <td>True</td>
+      <td>(71, 75)</td>
+      <td>flute and violin</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>How was the single released? On February 6, 2016, one day before her performance at the Super Bowl, Beyoncé released a new single exclusively on music streaming service Tidal called "Formation".</td>
+      <td>True</td>
+      <td>(31, 32)</td>
+      <td>exclusively</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>How much did the T-shirt with Beyonce's image on it make? Beyoncé participated in George Clooney and Wyclef Jean's Hope for Haiti Now: A Global Benefit for Earthquake Relief telethon and was named the official face of the limited edition CFDA "Fashion For Haiti" T-shirt, made by Theory which raised a total of $1 million. On March 5, 2010, Beyoncé and her mother Tina opened the Beyoncé Cosmetology Center at the Brooklyn Phoenix House, offering a seven-month cosmetology training course for men an</td>
+      <td>True</td>
+      <td>(76, 79)</td>
+      <td>$1 million</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Building-the-targets-on-th-fly">Building the targets on-th-fly<a class="anchor-link" href="#Building-the-targets-on-th-fly"> </a></h3>
 </div>
 </div>
 </div>
@@ -539,20 +1135,10 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">get_ans</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">)[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">answer_text</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">answer_text</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">get_dummy_cat</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">0</span>
-
-
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
     <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
     <span class="n">get_x</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">context</span><span class="p">),</span>
-    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">get_ans</span><span class="p">,</span> <span class="n">get_dummy_cat</span><span class="p">,</span> <span class="n">get_dummy_cat</span><span class="p">],</span>
+    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">get_ans_and_start_end_char_idxs</span><span class="p">,</span> <span class="n">get_dummy_token_idx</span><span class="p">,</span> <span class="n">get_dummy_token_idx</span><span class="p">],</span>
     <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">(),</span>
     <span class="n">n_inp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
@@ -673,43 +1259,6 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># for idx, b in enumerate(dls.valid):</span>
-<span class="c1">#     for input_ids, start_idx, end_idx in zip(b[0][&quot;input_ids&quot;], b[2], b[3]):</span>
-<span class="c1">#         print(hf_tokenizer.decode(input_ids))</span>
-<span class="c1">#         if start_idx.item() != 0:</span>
-<span class="c1">#             print(f&quot;*** Answer: {hf_tokenizer.decode(input_ids[start_idx:end_idx])} ***\n&quot;)</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             print(&quot;*** NO ANSWER ***&quot;)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The <code>show_batch</code> method above allows us to create a more interpretable view of our question/answer data.</p>
-
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">=</span><span class="n">dls</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">trunc_at</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 
@@ -744,21 +1293,21 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>Who beat out Beyonce for Best Female Video? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copies in its firs</td>
+      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sell</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Who beat out Beyonce for Best Female Video?, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman during the 2000s. It also included the successful "Sweet Dreams"</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
+      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award?, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman d</td>
+      <td>True</td>
+      <td>(52, 54)</td>
+      <td>Single Ladies</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>Who beat out Beyonce for Best Female Video?Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the 2009 BET Awards. At the 2009 MTV Video Music Awards, the video was nominated for nine awards, u</td>
+      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award?s. It also included the successful "Sweet Dreams", and singles "Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the 2</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
