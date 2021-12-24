@@ -66,7 +66,7 @@ nb_path: "nbs/04_data-question-answering.ipynb"
 <pre>What we&#39;re running with at the time this documentation was generated:
 torch: 1.10.1+cu102
 fastai: 2.5.3
-transformers: 4.14.1
+transformers: 4.15.0
 </pre>
 </div>
 </div>
@@ -91,7 +91,7 @@ transformers: 4.14.1
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> <span class="n">train_ds</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;squad_v2&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;train[:1000]&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;squad_v2&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s1">&#39;train[:1000]&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -299,7 +299,7 @@ transformers: 4.14.1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="pre_process_qa" class="doc_header"><code>pre_process_qa</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L49" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pre_process_qa</code>(<strong><code>raw_df</code></strong>, <strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>, <strong><code>ans_start_char_idx</code></strong>:<code>str</code>=<em><code>'ans_start_char_idx'</code></em>, <strong><code>ans_end_char_idx</code></strong>:<code>str</code>=<em><code>'ans_end_char_idx'</code></em>, <strong><code>keep_cols</code></strong>:<code>list</code>=<em><code>[]</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'return_overflowing_tokens': True}</code></em>)</p>
+<h4 id="pre_process_qa" class="doc_header"><code>pre_process_qa</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L50" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pre_process_qa</code>(<strong><code>raw_df</code></strong>, <strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>, <strong><code>ans_start_char_idx</code></strong>:<code>str</code>=<em><code>'ans_start_char_idx'</code></em>, <strong><code>ans_end_char_idx</code></strong>:<code>str</code>=<em><code>'ans_end_char_idx'</code></em>, <strong><code>keep_cols</code></strong>:<code>list</code>=<em><code>[]</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'return_overflowing_tokens': True}</code></em>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -357,9 +357,9 @@ transformers: 4.14.1
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;ans_start_char_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">answers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;answer_start&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;answer_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">answers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;ans_end_char_idx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;ans_start_char_idx&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="n">squad_df</span><span class="p">[</span><span class="s1">&#39;answer_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">squad_df</span><span class="p">[</span><span class="s2">&quot;ans_start_char_idx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">answers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">squad_df</span><span class="p">[</span><span class="s2">&quot;answer_text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="o">.</span><span class="n">answers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">squad_df</span><span class="p">[</span><span class="s2">&quot;ans_end_char_idx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">squad_df</span><span class="p">[</span><span class="s2">&quot;ans_start_char_idx&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">+</span> <span class="n">squad_df</span><span class="p">[</span><span class="s2">&quot;answer_text&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">squad_df</span><span class="p">))</span>
 <span class="n">squad_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -460,7 +460,7 @@ transformers: 4.14.1
     <span class="n">hf_arch</span><span class="p">,</span>
     <span class="n">hf_tokenizer</span><span class="p">,</span>
     <span class="n">keep_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">],</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">},</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
 <span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc_df</span><span class="p">))</span>
@@ -573,7 +573,7 @@ transformers: 4.14.1
         <span class="c1"># print(hf_tokenizer.decode(tok_d[&quot;input_ids&quot;][test_example.ans_start_token_idx : test_example.ans_end_token_idx]).strip())</span>
         <span class="n">test_eq</span><span class="p">(</span>
             <span class="n">test_example</span><span class="o">.</span><span class="n">answer_text</span><span class="p">,</span>
-            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tok_d</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tok_d</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">test_eq</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -617,7 +617,7 @@ transformers: 4.14.1
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>1480
+<pre>1497
 </pre>
 </div>
 </div>
@@ -713,7 +713,7 @@ transformers: 4.14.1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L124" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
+<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L125" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -745,7 +745,7 @@ transformers: 4.14.1
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L129" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
+<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L130" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -783,6 +783,9 @@ See [Everything you always wanted to know about padding and truncation](https://
 if your inputs are pre-tokenized (not numericalized)</p></li>
 </ul>
 <ul>
+<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss</p></li>
+</ul>
+<ul>
 <li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs</p></li>
 </ul>
 <ul>
@@ -817,35 +820,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_ans_and_start_end_char_idxs" class="doc_header"><code>get_ans_and_start_end_char_idxs</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L152" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_ans_and_start_end_char_idxs</code>(<strong><code>r</code></strong>)</p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>r</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_dummy_token_idx" class="doc_header"><code>get_dummy_token_idx</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L158" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dummy_token_idx</code>(<strong><code>r</code></strong>)</p>
+<h4 id="get_dummy_token_idx" class="doc_header"><code>get_dummy_token_idx</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L203" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dummy_token_idx</code>(<strong><code>r</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -882,16 +857,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">HF_QABeforeBatchTransform</span><span class="p">(</span>
-    <span class="n">hf_arch</span><span class="p">,</span>
-    <span class="n">hf_config</span><span class="p">,</span>
-    <span class="n">hf_tokenizer</span><span class="p">,</span>
-    <span class="n">hf_model</span><span class="p">,</span>
-    <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">,</span>
-    <span class="n">truncation</span><span class="o">=</span><span class="s2">&quot;only_second&quot;</span><span class="p">,</span>
-    <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_special_tokens_mask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;return_offsets_mapping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-<span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">HF_QABeforeBatchTransform</span><span class="p">(</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">)</span>
 
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">HF_TextBlock</span><span class="p">(</span><span class="n">before_batch_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">HF_QuestionAnswerInput</span><span class="p">),</span>
@@ -899,6 +865,14 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
 <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_ans_and_start_end_char_idxs</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">answer_text</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">answer_text</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">answer_text</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+
 
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
     <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
@@ -1065,31 +1039,31 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>What did Beyonce and Rowland found in 2005? After Hurricane Katrina in 2005, Beyoncé and Rowland founded the Survivor Foundation to provide transitional housing for victims in the Houston area, to which Beyoncé contributed an initial $250,000. The foundation has since expanded to work with other charities in the city, and also provided relief following Hurricane Ike three years later.</td>
+      <td>Where did Beyoncé exclusively release her single, Formation? On February 6, 2016, one day before her performance at the Super Bowl, Beyoncé released a new single exclusively on music streaming service Tidal called "Formation".</td>
       <td>True</td>
-      <td>(26, 29)</td>
-      <td>the Survivor Foundation</td>
+      <td>(41, 43)</td>
+      <td>Tidal</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>What instruments did Chopin's father play? In October 1810, six months after Fryderyk's birth, the family moved to Warsaw, where his father acquired a post teaching French at the Warsaw Lyceum, then housed in the Saxon Palace. Fryderyk lived with his family in the Palace grounds. The father played the flute and violin; the mother played the piano and gave lessons to boys in the boarding house that the Chopins kept. Chopin was of slight build, and even in early childhood was prone to illnesses.</td>
+      <td>In what year did Frédéric officially acquire French citizenship? Chopin arrived in Paris in late September 1831; he would never return to Poland, thus becoming one of many expatriates of the Polish Great Emigration. In France he used the French versions of his given names, and after receiving French citizenship in 1835, he travelled on a French passport. However, Chopin remained close to his fellow Poles in exile as friends and confidants and he never felt fully comfortable speaking French. Cho</td>
       <td>True</td>
-      <td>(71, 75)</td>
-      <td>flute and violin</td>
+      <td>(68, 70)</td>
+      <td>1835</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>How was the single released? On February 6, 2016, one day before her performance at the Super Bowl, Beyoncé released a new single exclusively on music streaming service Tidal called "Formation".</td>
+      <td>What did Beyonce's Fashion Diva  feature? In 2005, Beyoncé teamed up with House of Brands, a shoe company, to produce a range of footwear for House of Deréon. In January 2008, Starwave Mobile launched Beyoncé Fashion Diva, a "high-style" mobile game with a social networking component, featuring the House of Deréon collection. In July 2009, Beyoncé and her mother launched a new junior apparel label, Sasha Fierce for Deréon, for back-to-school selling. The collection included sportswear, outerwea</td>
       <td>True</td>
-      <td>(31, 32)</td>
-      <td>exclusively</td>
+      <td>(73, 79)</td>
+      <td>House of Deréon collection</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>How much did the T-shirt with Beyonce's image on it make? Beyoncé participated in George Clooney and Wyclef Jean's Hope for Haiti Now: A Global Benefit for Earthquake Relief telethon and was named the official face of the limited edition CFDA "Fashion For Haiti" T-shirt, made by Theory which raised a total of $1 million. On March 5, 2010, Beyoncé and her mother Tina opened the Beyoncé Cosmetology Center at the Brooklyn Phoenix House, offering a seven-month cosmetology training course for men an</td>
+      <td>How many Grammys has Beyoncé won? Beyoncé has won 20 Grammy Awards, both as a solo artist and member of Destiny's Child, making her the second most honored female artist by the Grammys, behind Alison Krauss and the most nominated woman in Grammy Award history with 52 nominations. "Single Ladies (Put a Ring on It)" won Song of the Year in 2010 while "Say My Name" and "Crazy in Love" had previously won Best R&amp;B Song. Dangerously in Love, B'Day and I Am... Sasha Fierce have all won Best Contempora</td>
       <td>True</td>
-      <td>(76, 79)</td>
-      <td>$1 million</td>
+      <td>(16, 17)</td>
+      <td>20</td>
     </tr>
   </tbody>
 </table>
@@ -1122,9 +1096,8 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">hf_tokenizer</span><span class="p">,</span>
     <span class="n">hf_model</span><span class="p">,</span>
     <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">,</span>
-    <span class="n">truncation</span><span class="o">=</span><span class="s2">&quot;only_second&quot;</span><span class="p">,</span>
     <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_special_tokens_mask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;return_offsets_mapping&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
 <span class="p">)</span>
 
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
@@ -1133,6 +1106,13 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
 <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_ans_and_start_end_char_idxs</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">answer_text</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">answer_text</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">answer_text</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
 
 
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
@@ -1293,21 +1273,21 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sell</td>
+      <td>In 2009, Beyonce started her second world tour and grossed how much money? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sel</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>2</th>
-      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award?, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman d</td>
-      <td>True</td>
-      <td>(52, 54)</td>
-      <td>Single Ladies</td>
+      <td>In 2009, Beyonce started her second world tour and grossed how much money?, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
     </tr>
     <tr>
       <th>3</th>
-      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award?s. It also included the successful "Sweet Dreams", and singles "Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the 2</td>
+      <td>In 2009, Beyonce started her second world tour and grossed how much money?s. It also included the successful "Sweet Dreams", and singles "Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
