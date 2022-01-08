@@ -154,6 +154,41 @@ transformers: 4.15.0
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">raw_datasets</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;chunk_tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">names</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw_datasets</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">names</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw_datasets</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;pos_tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">names</span><span class="p">[:</span><span class="mi">20</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;O&#39;, &#39;B-ADJP&#39;, &#39;I-ADJP&#39;, &#39;B-ADVP&#39;, &#39;I-ADVP&#39;, &#39;B-CONJP&#39;, &#39;I-CONJP&#39;, &#39;B-INTJ&#39;, &#39;I-INTJ&#39;, &#39;B-LST&#39;, &#39;I-LST&#39;, &#39;B-NP&#39;, &#39;I-NP&#39;, &#39;B-PP&#39;, &#39;I-PP&#39;, &#39;B-PRT&#39;, &#39;I-PRT&#39;, &#39;B-SBAR&#39;, &#39;I-SBAR&#39;, &#39;B-UCP&#39;]
+[&#39;O&#39;, &#39;B-PER&#39;, &#39;I-PER&#39;, &#39;B-ORG&#39;, &#39;I-ORG&#39;, &#39;B-LOC&#39;, &#39;I-LOC&#39;, &#39;B-MISC&#39;, &#39;I-MISC&#39;]
+[&#39;&#34;&#39;, &#34;&#39;&#39;&#34;, &#39;#&#39;, &#39;$&#39;, &#39;(&#39;, &#39;)&#39;, &#39;,&#39;, &#39;.&#39;, &#39;:&#39;, &#39;``&#39;, &#39;CC&#39;, &#39;CD&#39;, &#39;DT&#39;, &#39;EX&#39;, &#39;FW&#39;, &#39;IN&#39;, &#39;JJ&#39;, &#39;JJR&#39;, &#39;JJS&#39;, &#39;LS&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">labels</span> <span class="o">=</span> <span class="n">raw_datasets</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">features</span><span class="p">[</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">names</span>
 <span class="n">labels</span>
 </pre></div>
@@ -207,7 +242,7 @@ transformers: 4.15.0
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_cls</span> <span class="o">=</span> <span class="n">AutoModelForTokenClassification</span>
 
-<span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;roberta-base&quot;</span> <span class="c1"># &quot;bert-base-multilingual-cased&quot;</span>
+<span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;roberta-base&quot;</span>  <span class="c1"># &quot;bert-base-multilingual-cased&quot;</span>
 <span class="n">n_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
 
 <span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span> <span class="o">=</span> <span class="n">BLURR</span><span class="o">.</span><span class="n">get_hf_objects</span><span class="p">(</span>
@@ -386,7 +421,7 @@ are Ids or strings (in the later case we'll use the <code>label_names</code> to 
 <h2 id="BILabelingStrategy" class="doc_header"><code>class</code> <code>BILabelingStrategy</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L78" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>BILabelingStrategy</code>(<strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>) :: <a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a></p>
 </blockquote>
 <p>If using B/I labels, the first token assoicated to a given word gets the "B" label while all other tokens related
-to that same word get "I" labels.  If "I" labels don't exist, this strategy behaves like the <a href="/blurr/data-token-classification.html#SameLabelLabelingStrategy"><code>SameLabelLabelingStrategy</code></a>.
+to that same word get "I" labels.  If "I" labels don't exist, this strategy behaves like the <a href="/blurr/data-token-classification.html#OnlyFirstTokenLabelingStrategy"><code>OnlyFirstTokenLabelingStrategy</code></a>.
 Works where labels are Ids or strings (in the later case we'll use the <code>label_names</code> to look up it's Id)</p>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -439,16 +474,16 @@ Works where labels are Ids or strings (in the later case we'll use the <code>lab
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">raw_word_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;tokens&#39;</span><span class="p">]</span>
-    <span class="n">raw_label_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;ner_tags&#39;</span><span class="p">]</span>
+    <span class="n">raw_word_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;tokens&quot;</span><span class="p">]</span>
+    <span class="n">raw_label_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">]</span>
 
     <span class="n">be</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">raw_word_list</span><span class="p">,</span> <span class="n">is_split_into_words</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">be</span><span class="p">[</span><span class="s1">&#39;input_ids&#39;</span><span class="p">]</span>
+    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">be</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
     <span class="n">targ_ids</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">100</span> <span class="k">if</span> <span class="p">(</span><span class="n">word_id</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">raw_label_list</span><span class="p">[</span><span class="n">word_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">word_id</span> <span class="ow">in</span> <span class="n">be</span><span class="o">.</span><span class="n">word_ids</span><span class="p">()]</span>
 
     <span class="n">tok_labels</span> <span class="o">=</span> <span class="n">get_token_labels_from_input_ids</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">input_ids</span><span class="p">,</span> <span class="n">targ_ids</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">tok_label</span><span class="p">,</span> <span class="n">targ_id</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="n">tok_labels</span><span class="p">,</span> <span class="p">[</span><span class="n">label_id</span> <span class="k">for</span> <span class="n">label_id</span> <span class="ow">in</span> <span class="n">targ_ids</span> <span class="k">if</span> <span class="n">label_id</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">100</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">tok_label</span><span class="p">,</span> <span class="n">targ_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tok_labels</span><span class="p">,</span> <span class="p">[</span><span class="n">label_id</span> <span class="k">for</span> <span class="n">label_id</span> <span class="ow">in</span> <span class="n">targ_ids</span> <span class="k">if</span> <span class="n">label_id</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">100</span><span class="p">]):</span>
         <span class="n">test_eq</span><span class="p">(</span><span class="n">tok_label</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">targ_id</span><span class="p">])</span>
 </pre></div>
 
@@ -470,7 +505,7 @@ Works where labels are Ids or strings (in the later case we'll use the <code>lab
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_token_labels_from_input_ids" class="doc_header"><code>get_token_labels_from_input_ids</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L110" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_token_labels_from_input_ids</code>(<strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>input_ids</code></strong>:<code>List</code>[<code>int</code>], <strong><code>token_label_ids</code></strong>, <strong><code>vocab</code></strong>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>ignore_token</code></strong>=<em><code>'[xIGNx]'</code></em>)</p>
+<h4 id="get_token_labels_from_input_ids" class="doc_header"><code>get_token_labels_from_input_ids</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L110" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_token_labels_from_input_ids</code>(<strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>input_ids</code></strong>:<code>List</code>[<code>int</code>], <strong><code>token_label_ids</code></strong>:<code>List</code>[<code>int</code>], <strong><code>vocab</code></strong>:<code>List</code>[<code>str</code>], <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>)</p>
 </blockquote>
 <p>Given a list of input IDs, the label ID associated to each, and the labels vocab, this method will return a list of tuples whereby
 each tuple defines the "token" and its label name. For example:
@@ -483,10 +518,10 @@ each tuple defines the "token" and its label name. For example:
 <li><strong><code>input_ids</code></strong> : <em><code>typing.List[int]</code></em>   <p>List of input_ids for the tokens in a single piece of processed text</p></li>
 </ul>
 <ul>
-<li><strong><code>token_label_ids</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em> <p>List of label indexs for each token</p></li>
+<li><strong><code>token_label_ids</code></strong> : <em><code>typing.List[int]</code></em> <p>List of label indexs for each token</p></li>
 </ul>
 <ul>
-<li><strong><code>vocab</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em>   <p>List of label names from witch the `label` indicies can be used to find the name of the label</p></li>
+<li><strong><code>vocab</code></strong> : <em><code>typing.List[str]</code></em>   <p>List of label names from witch the `label` indicies can be used to find the name of the label</p></li>
 </ul>
 <ul>
 <li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss</p></li>
@@ -524,17 +559,17 @@ each tuple defines the "token" and its label name. For example:
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-    <span class="n">raw_word_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;tokens&#39;</span><span class="p">]</span>
-    <span class="n">raw_label_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;ner_tags&#39;</span><span class="p">]</span>
+    <span class="n">raw_word_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;tokens&quot;</span><span class="p">]</span>
+    <span class="n">raw_label_list</span> <span class="o">=</span> <span class="n">conll2003_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">]</span>
 
     <span class="n">be</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">raw_word_list</span><span class="p">,</span> <span class="n">is_split_into_words</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">be</span><span class="p">[</span><span class="s1">&#39;input_ids&#39;</span><span class="p">]</span>
+    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">be</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
     <span class="n">targ_ids</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">100</span> <span class="k">if</span> <span class="p">(</span><span class="n">word_id</span> <span class="o">==</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="n">raw_label_list</span><span class="p">[</span><span class="n">word_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">word_id</span> <span class="ow">in</span> <span class="n">be</span><span class="o">.</span><span class="n">word_ids</span><span class="p">()]</span>
 
     <span class="n">tok_labels</span> <span class="o">=</span> <span class="n">get_token_labels_from_input_ids</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">input_ids</span><span class="p">,</span> <span class="n">targ_ids</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
     <span class="n">word_labels</span> <span class="o">=</span> <span class="n">get_word_labels_from_token_labels</span><span class="p">(</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">tok_labels</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">word_label</span><span class="p">,</span> <span class="n">raw_word</span><span class="p">,</span> <span class="n">raw_label_id</span> <span class="ow">in</span> <span class="nb">zip</span> <span class="p">(</span><span class="n">word_labels</span><span class="p">,</span> <span class="n">raw_word_list</span><span class="p">,</span> <span class="n">raw_label_list</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">word_label</span><span class="p">,</span> <span class="n">raw_word</span><span class="p">,</span> <span class="n">raw_label_id</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">word_labels</span><span class="p">,</span> <span class="n">raw_word_list</span><span class="p">,</span> <span class="n">raw_label_list</span><span class="p">):</span>
         <span class="n">test_eq</span><span class="p">(</span><span class="n">word_label</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">raw_word</span><span class="p">)</span>
         <span class="n">test_eq</span><span class="p">(</span><span class="n">word_label</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">raw_label_id</span><span class="p">])</span>
 </pre></div>
@@ -606,14 +641,14 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TokenClassificationPreprocessor" class="doc_header"><code>class</code> <code>TokenClassificationPreprocessor</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L171" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenClassificationPreprocessor</code>(<strong><code>hf_tokenizer</code></strong>, <strong><code>chunk_examples</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>word_stride</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>label_names</code></strong>:<code>Optional</code>[<code>List</code>[<code>str</code>]]=<em><code>None</code></em>, <strong><code>batch_size</code></strong>:<code>int</code>=<em><code>1000</code></em>, <strong><code>id_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>word_list_attr</code></strong>:<code>str</code>=<em><code>'tokens'</code></em>, <strong><code>label_list_attr</code></strong>:<code>str</code>=<em><code>'labels'</code></em>, <strong><code>is_valid_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>'is_valid'</code></em>, <strong><code>labeling_strategy_cls</code></strong>:<a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a>=<em><code>OnlyFirstTokenLabelingStrategy</code></em>, <strong><code>tok_kwargs</code></strong>=<em><code>{}</code></em>) :: <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a></p>
+<h2 id="TokenClassificationPreprocessor" class="doc_header"><code>class</code> <code>TokenClassificationPreprocessor</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L171" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenClassificationPreprocessor</code>(<strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>chunk_examples</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>word_stride</code></strong>:<code>int</code>=<em><code>2</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>, <strong><code>label_names</code></strong>:<code>Optional</code>[<code>List</code>[<code>str</code>]]=<em><code>None</code></em>, <strong><code>batch_size</code></strong>:<code>int</code>=<em><code>1000</code></em>, <strong><code>id_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>word_list_attr</code></strong>:<code>str</code>=<em><code>'tokens'</code></em>, <strong><code>label_list_attr</code></strong>:<code>str</code>=<em><code>'labels'</code></em>, <strong><code>is_valid_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>'is_valid'</code></em>, <strong><code>labeling_strategy_cls</code></strong>:<a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a>=<em><code>OnlyFirstTokenLabelingStrategy</code></em>, <strong><code>slow_word_ids_func</code></strong>:<code>Optional</code>[<code>Callable</code>]=<em><code>None</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>) :: <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a></p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><p><strong><code>hf_tokenizer</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
-</li>
-<li><p><strong><code>chunk_examples</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>    <p>Set to `True` if the preprocessor should chunk examples that exceed `max_length`</p></p>
-</li>
+<li><strong><code>hf_tokenizer</code></strong> : <em><code>&lt;class 'transformers.tokenization_utils_base.PreTrainedTokenizerBase'&gt;</code></em>  <p>A Hugging Face tokenizer</p></li>
+</ul>
+<ul>
+<li><strong><code>chunk_examples</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>    <p>Set to `True` if the preprocessor should chunk examples that exceed `max_length`</p></li>
 </ul>
 <ul>
 <li><strong><code>word_stride</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>Like "stride" except for words (not tokens)</p></li>
@@ -625,21 +660,31 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 <li><strong><code>label_names</code></strong> : <em><code>typing.Union[typing.List[str], NoneType]</code></em>, <em>optional</em> <p>The label names (if not specified, will build from DataFrame)</p></li>
 </ul>
 <ul>
-<li><p><strong><code>batch_size</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>id_attr</code></strong> : <em><code>typing.Union[str, NoneType]</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>word_list_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>label_list_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>is_valid_attr</code></strong> : <em><code>typing.Union[str, NoneType]</code></em>, <em>optional</em></p>
-</li>
-<li><p><strong><code>labeling_strategy_cls</code></strong> : <em><code>&lt;class 'blurr.data.token_classification.BaseLabelingStrategy'&gt;</code></em>, <em>optional</em> <p>The labeling strategy you want to apply when associating labels with word tokens</p></p>
-</li>
+<li><strong><code>batch_size</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>The number of examples to process at a time</p></li>
 </ul>
 <ul>
-<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em></li>
+<li><strong><code>id_attr</code></strong> : <em><code>typing.Union[str, NoneType]</code></em>, <em>optional</em>  <p>The unique identifier in the dataset</p></li>
+</ul>
+<ul>
+<li><strong><code>word_list_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>The attribute holding the list of words</p></li>
+</ul>
+<ul>
+<li><strong><code>label_list_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>    <p>The attribute holding the list of labels (one for each word in `word_list_attr`)</p></li>
+</ul>
+<ul>
+<li><strong><code>is_valid_attr</code></strong> : <em><code>typing.Union[str, NoneType]</code></em>, <em>optional</em>    <p>The attribute that should be created if your are processing individual training and validation
+datasets into a single dataset, and will indicate to which each example is associated</p></li>
+</ul>
+<ul>
+<li><strong><code>labeling_strategy_cls</code></strong> : <em><code>&lt;class 'blurr.data.token_classification.BaseLabelingStrategy'&gt;</code></em>, <em>optional</em> <p>The labeling strategy you want to apply when associating labels with word tokens</p></li>
+</ul>
+<ul>
+<li><strong><code>slow_word_ids_func</code></strong> : <em><code>typing.Union[typing.Callable, NoneType]</code></em>, <em>optional</em>   <p>If using a slow tokenizer, users will need to prove a `slow_word_ids_func` that accepts a
+tokenizzer, example index, and a batch encoding as arguments and in turn returnes the
+equavlient of fast tokenizer's `word_ids`</p></li>
+</ul>
+<ul>
+<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Tokenization kwargs that will be applied with calling the tokenizer</p></li>
 </ul>
 
 </div>
@@ -987,7 +1032,7 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_TokenTensorCategory" class="doc_header"><code>class</code> <code>HF_TokenTensorCategory</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L353" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenTensorCategory</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorBase</code></p>
+<h2 id="HF_TokenTensorCategory" class="doc_header"><code>class</code> <code>HF_TokenTensorCategory</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L372" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenTensorCategory</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorBase</code></p>
 </blockquote>
 <p>A <code>Tensor</code> which support subclass pickling, and maintains metadata when casting or after methods</p>
 
@@ -1027,18 +1072,18 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_TokenCategorize" class="doc_header"><code>class</code> <code>HF_TokenCategorize</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L358" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenCategorize</code>(<strong><code>vocab</code></strong>=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>=<em><code>None</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>None</code></em>) :: <code>Transform</code></p>
+<h2 id="HF_TokenCategorize" class="doc_header"><code>class</code> <code>HF_TokenCategorize</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L377" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenCategorize</code>(<strong><code>vocab</code></strong>:<code>List</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Reversible transform of a list of category string to <code>vocab</code> id</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong><code>vocab</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>The unique list of entities (e.g., B-LOC) (default: CategoryMap(vocab))</p></li>
+<li><strong><code>vocab</code></strong> : <em><code>typing.List[str]</code></em>, <em>optional</em>   <p>The unique list of entities (e.g., B-LOC) (default: CategoryMap(vocab))</p></li>
 </ul>
 <ul>
-<li><strong><code>ignore_token</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>  <p>The token used to identifiy ignored tokens (default: xIGNx)</p></li>
+<li><strong><code>ignore_token</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The token used to identifiy ignored tokens (default: xIGNx)</p></li>
 </ul>
 <ul>
-<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>   <p>The token ID that should be ignored when calculating the loss (default: CrossEntropyLossFlat().ignore_index)</p></li>
+<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss (default: CrossEntropyLossFlat().ignore_index)</p></li>
 </ul>
 
 </div>
@@ -1082,18 +1127,18 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="HF_TokenCategoryBlock" class="doc_header"><code>HF_TokenCategoryBlock</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L392" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>HF_TokenCategoryBlock</code>(<strong><code>vocab</code></strong>=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>=<em><code>None</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>None</code></em>)</p>
+<h4 id="HF_TokenCategoryBlock" class="doc_header"><code>HF_TokenCategoryBlock</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L410" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>HF_TokenCategoryBlock</code>(<strong><code>vocab</code></strong>:<code>Optional</code>[<code>List</code>[<code>str</code>]]=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>)</p>
 </blockquote>
 <p><code>TransformBlock</code> for per-token categorical targets</p>
 <p><strong>Parameters:</strong></p>
 <ul>
-<li><strong><code>vocab</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em> <p>The unique list of entities (e.g., B-LOC) (default: CategoryMap(vocab))</p></li>
+<li><strong><code>vocab</code></strong> : <em><code>typing.Union[typing.List[str], NoneType]</code></em>, <em>optional</em>   <p>The unique list of entities (e.g., B-LOC) (default: CategoryMap(vocab))</p></li>
 </ul>
 <ul>
-<li><strong><code>ignore_token</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>  <p>The token used to identifiy ignored tokens (default: xIGNx)</p></li>
+<li><strong><code>ignore_token</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The token used to identifiy ignored tokens (default: xIGNx)</p></li>
 </ul>
 <ul>
-<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'NoneType'&gt;</code></em>, <em>optional</em>   <p>The token ID that should be ignored when calculating the loss (default: CrossEntropyLossFlat().ignore_index)</p></li>
+<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss (default: CrossEntropyLossFlat().ignore_index)</p></li>
 </ul>
 
 </div>
@@ -1130,7 +1175,7 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_TokenClassInput" class="doc_header"><code>class</code> <code>HF_TokenClassInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L405" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenClassInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
+<h2 id="HF_TokenClassInput" class="doc_header"><code>class</code> <code>HF_TokenClassInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L423" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenClassInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -1170,7 +1215,7 @@ allows the user to reconstruct the orginal raw inputs and labels.</p>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_TokenClassBeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_TokenClassBeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L410" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenClassBeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>labeling_strategy_cls</code></strong>:<a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a>=<em><code>OnlyFirstTokenLabelingStrategy</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>tok_kwargs</code></strong>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
+<h2 id="HF_TokenClassBeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_TokenClassBeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L428" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_TokenClassBeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>, <strong><code>labeling_strategy_cls</code></strong>:<a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a>=<em><code>OnlyFirstTokenLabelingStrategy</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>slow_word_ids_func</code></strong>:<code>Optional</code>[<code>Callable</code>]=<em><code>None</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -1215,6 +1260,11 @@ See [Everything you always wanted to know about padding and truncation](https://
 <ul>
 <li><strong><code>is_split_into_words</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>The `is_split_into_words` argument applied to your `hf_tokenizer` during tokenization. Set this to `True`
 if your inputs are pre-tokenized (not numericalized)</p></li>
+</ul>
+<ul>
+<li><strong><code>slow_word_ids_func</code></strong> : <em><code>typing.Union[typing.Callable, NoneType]</code></em>, <em>optional</em>   <p>If using a slow tokenizer, users will need to prove a `slow_word_ids_func` that accepts a
+tokenizzer, example index, and a batch encoding as arguments and in turn returnes the
+equavlient of fast tokenizer's `word_ids``</p></li>
 </ul>
 <ul>
 <li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs</p></li>
@@ -1328,7 +1378,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(2, torch.Size([4, 156]), torch.Size([4, 156]))</pre>
+<pre>(2, torch.Size([4, 88]), torch.Size([4, 88]))</pre>
 </div>
 
 </div>
@@ -1377,19 +1427,19 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[('MARKET', 'O'), ('TALK', 'O'), ('-', 'O'), ('USDA', 'B-ORG'), ('net', 'O'), ('change', 'O'), ('in', 'O'), ('weekly', 'O'), ('export', 'O'), ('commitments', 'O'), ('for', 'O'), ('the', 'O'), ('week', 'O'), ('ended', 'O'), ('August', 'O'), ('22', 'O'), (',', 'O'), ('includes', 'O'), ('old', 'O'), ('crop', 'O')]</td>
+      <td>[('15', 'O'), ('-', 'O'), ('Christian', 'B-PER'), ('Cullen', 'I-PER'), (',', 'O'), ('14', 'O'), ('-', 'O'), ('Jeff', 'B-PER'), ('Wilson', 'I-PER'), (',', 'O'), ('13', 'O'), ('-', 'O'), ('Walter', 'B-PER'), ('Little', 'I-PER'), (',', 'O'), ('12', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('Bunce', 'I-PER'), (',', 'O')]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('The', 'O'), ('survey', 'O'), (',', 'O'), ('conducted', 'O'), ('in', 'O'), ('late', 'O'), ('1995', 'O'), ('and', 'O'), ('the', 'O'), ('early', 'O'), ('part', 'O'), ('of', 'O'), ('this', 'O'), ('year', 'O'), ('by', 'O'), ('management', 'O'), ('consulting', 'O'), ('firm', 'O'), ('Towers', 'B-ORG'), ('Perrin', 'I-ORG')]</td>
+      <td>[('But', 'O'), ('analysts', 'O'), ('noted', 'O'), ('that', 'O'), ('Sierra', 'B-ORG'), ('still', 'O'), ('has', 'O'), ('much', 'O'), ('painful', 'O'), ('work', 'O'), ('ahead', 'O'), ('of', 'O'), ('it', 'O'), (',', 'O'), ('including', 'O'), ('cutting', 'O'), ('as', 'O'), ('many', 'O'), ('as', 'O'), ('150', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('Tapie', 'B-PER'), (',', 'O'), ('the', 'O'), ('target', 'O'), ('of', 'O'), ('a', 'O'), ('blizzard', 'O'), ('of', 'O'), ('legal', 'O'), ('actions', 'O'), ('over', 'O'), ('his', 'O'), ('now-destroyed', 'O'), ('business', 'O'), ('empire', 'O'), ('and', 'O'), ('the', 'O'), ('Marseille', 'B-ORG'), ('soccer', 'O'), ('team', 'O')]</td>
+      <td>[('The', 'O'), ('Pirates', 'B-ORG'), (',', 'O'), ('who', 'O'), ('conceded', 'O'), ('earlier', 'O'), ('this', 'O'), ('week', 'O'), ('they', 'O'), ('would', 'O'), ('be', 'O'), ('forced', 'O'), ('to', 'O'), ('trim', 'O'), ('salary', 'O'), ('from', 'O'), ('next', 'O'), ('season', 'O'), ("'s", 'O'), ('payroll', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('Defenders', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('de', 'I-PER'), ('Boer', 'I-PER'), ('(', 'O'), ('Ajax', 'B-ORG'), (')', 'O'), (',', 'O'), ('John', 'B-PER'), ('Veldman', 'I-PER'), ('(', 'O'), ('Ajax', 'B-ORG'), (')', 'O'), (',', 'O'), ('Jaap', 'B-PER'), ('Stam', 'I-PER'), ('(', 'O'), ('PSV', 'B-ORG'), (')', 'O')]</td>
+      <td>[('Lebed', 'B-PER'), (',', 'O'), ('who', 'O'), ('met', 'O'), ('Russian', 'B-MISC'), ('Prime', 'O'), ('Minister', 'O'), ('Viktor', 'B-PER'), ('Chernomyrdin', 'I-PER'), ('on', 'O'), ('Monday', 'O'), ('to', 'O'), ('discuss', 'O'), ('the', 'O'), ('progress', 'O'), ('he', 'O'), ('made', 'O'), ('on', 'O'), ('a', 'O'), ('political', 'O')]</td>
     </tr>
   </tbody>
 </table>
@@ -1426,7 +1476,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">word_list_attr</span><span class="o">=</span><span class="s2">&quot;tokens&quot;</span><span class="p">,</span>
     <span class="n">label_list_attr</span><span class="o">=</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">,</span>
     <span class="n">labeling_strategy_cls</span><span class="o">=</span><span class="n">OnlyFirstTokenLabelingStrategy</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">conll2003_df</span><span class="p">)</span>
 <span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -1509,7 +1559,14 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">HF_TokenClassBeforeBatchTransform</span><span class="p">(</span>
-    <span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span><span class="p">,</span> <span class="n">is_pretokenized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;add_special_tokens&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="p">}</span>
+    <span class="n">hf_arch</span><span class="p">,</span>
+    <span class="n">hf_config</span><span class="p">,</span>
+    <span class="n">hf_tokenizer</span><span class="p">,</span>
+    <span class="n">hf_model</span><span class="p">,</span>
+    <span class="n">is_pretokenized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;add_special_tokens&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">},</span>
 <span class="p">)</span>
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span><span class="n">HF_TextBlock</span><span class="p">(</span><span class="n">before_batch_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">HF_TokenClassInput</span><span class="p">),</span> <span class="n">HF_TokenCategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">labels</span><span class="p">))</span>
 
@@ -1579,7 +1636,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(2, torch.Size([4, 156]), torch.Size([4, 156]))</pre>
+<pre>(2, torch.Size([4, 128]), torch.Size([4, 128]))</pre>
 </div>
 
 </div>
@@ -1625,15 +1682,15 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('"', 'O'), ('...For', 'O'), ('the', 'O'), ('sake', 'O'), ('of', 'O'), ('safety', 'O'), ('we', 'O'), ('are', 'O'), ('asking', 'O'), ('for', 'O'), ('their', 'O'), ('family', 'O'), ('members', 'O'), ('or', 'O'), ('the', 'O'), ('authorities', 'O'), ('to', 'O'), ('come', 'O'), ('and', 'O'), ('pick', 'O')]</td>
+      <td>[('"', 'O'), ('We', 'O'), ('have', 'O'), ('no', 'O'), ('doubt', 'O'), ('that', 'O'), ('this', 'O'), ('is', 'O'), ('one', 'O'), ('of', 'O'), ('the', 'O'), ('rarest', 'O'), ('of', 'O'), ('the', 'O'), ('rare', 'O'), ('cases', 'O'), (',', 'O'), ('not', 'O'), ('merely', 'O'), ('due', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('A', 'O'), ('fire', 'O'), ('bomb', 'O'), ('was', 'O'), ('thrown', 'O'), ('over', 'O'), ('the', 'O'), ('fence', 'O'), ('into', 'O'), ('the', 'O'), ('grounds', 'O'), ('of', 'O'), ('the', 'O'), ('U.S.', 'B-LOC'), ('Consulate-General', 'O'), ('in', 'O'), ('Indonesia', 'B-LOC'), ("'s", 'O'), ('second', 'O'), ('largest', 'O')]</td>
+      <td>[('"', 'O'), ('From', 'O'), ('here', 'O'), ('we', 'O'), ('will', 'O'), ('march', 'O'), ('to', 'O'), ('Islamabad', 'B-LOC'), ('and', 'O'), ('by', 'O'), ('God', 'B-PER'), ('we', 'O'), ('will', 'O'), ('not', 'O'), ('let', 'O'), ('Benazir', 'B-PER'), ('and', 'O'), ('(', 'O'), ('Bhutto', 'B-PER'), ("'s", 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('Diplomats', 'O'), ('explain', 'O'), ('the', 'O'), ('purpose', 'O'), ('of', 'O'), ('this', 'O'), ('electoral', 'O'), ('engineering', 'O'), ('is', 'O'), ('to', 'O'), ('secure', 'O'), ('Serb', 'B-MISC'), ('control', 'O'), ('over', 'O'), ('pivotal', 'O'), ('towns', 'O'), ('inside', 'O'), ('the', 'O'), ('49', 'O'), ('per', 'O')]</td>
+      <td>[('Mohammed', 'B-PER'), ('Saleh', 'I-PER'), (',', 'O'), ('director', 'O'), ('of', 'O'), ('the', 'O'), ('Egyptian', 'B-MISC'), ('Museum', 'O'), (',', 'O'), ('told', 'O'), ('Reuters', 'B-ORG'), ('television', 'O'), ('a', 'O'), ('U.S.', 'B-LOC'), ('team', 'O'), ('found', 'O'), ('the', 'O'), ('pots', 'O'), (',', 'O'), ('some', 'O')]</td>
     </tr>
   </tbody>
 </table>
