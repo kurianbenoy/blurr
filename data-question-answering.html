@@ -177,7 +177,7 @@ transformers: 4.15.0
       <th>0</th>
       <td>56be85543aeaaa14008c9063</td>
       <td>Beyoncé</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>When did Beyonce start becoming popular?</td>
       <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
     </tr>
@@ -185,7 +185,7 @@ transformers: 4.15.0
       <th>1</th>
       <td>56be85543aeaaa14008c9065</td>
       <td>Beyoncé</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>What areas did Beyonce compete in when she was growing up?</td>
       <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
     </tr>
@@ -278,7 +278,7 @@ transformers: 4.15.0
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Preprocessing-methods">Preprocessing methods<a class="anchor-link" href="#Preprocessing-methods"> </a></h2><p>With version 2.0.0 of blurr, we include a generalized preprocessing function you can use for finding the start/end token indicies based on your tokenizer of choice</p>
+<h2 id="Preprocessing">Preprocessing<a class="anchor-link" href="#Preprocessing"> </a></h2><p>With version 2.0.0 of blurr, we include a <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a> for question answering that can either truncate texts or else chunk long documents into multiple examples</p>
 
 </div>
 </div>
@@ -304,7 +304,8 @@ transformers: 4.15.0
 <li><strong><code>batch_size</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>The number of examples to process at a time</p></li>
 </ul>
 <ul>
-<li><strong><code>id_attr</code></strong> : <em><code>typing.Union[str, NoneType]</code></em>, <em>optional</em>  <p>The unique identifier in the dataset</p></li>
+<li><strong><code>id_attr</code></strong> : <em><code>typing.Union[str, NoneType]</code></em>, <em>optional</em>  <p>The unique identifier in the dataset. If not specified and "return_overflowing_tokens": True, an "_id" attribute
+will be added to your dataset with its value a unique, sequential integer, assigned to each record</p></li>
 </ul>
 <ul>
 <li><strong><code>ctx_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the context (where the answer is included) (default: 'context')</p></li>
@@ -326,7 +327,7 @@ transformers: 4.15.0
 datasets into a single dataset, and will indicate to which each example is associated</p></li>
 </ul>
 <ul>
-<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Tokenization kwargs that will be applied with calling the tokenizer</p></li>
+<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Tokenization kwargs that will be applied with calling the tokenizer (default: {"return_overflowing_tokens": True})</p></li>
 </ul>
 
 </div>
@@ -342,68 +343,6 @@ datasets into a single dataset, and will indicate to which each example is assoc
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_markdown rendered_html output_subarea ">
-<h4 id="pre_process_qa" class="doc_header"><code>pre_process_qa</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L116" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>pre_process_qa</code>(<strong><code>raw_df</code></strong>, <strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>, <strong><code>ans_start_char_idx</code></strong>:<code>str</code>=<em><code>'ans_start_char_idx'</code></em>, <strong><code>ans_end_char_idx</code></strong>:<code>str</code>=<em><code>'ans_end_char_idx'</code></em>, <strong><code>keep_cols</code></strong>:<code>list</code>=<em><code>[]</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'return_overflowing_tokens': True}</code></em>)</p>
-</blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>raw_df</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em>  <p>Your pd.DataFrame</p></li>
-</ul>
-<ul>
-<li><strong><code>hf_arch</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>    <p>The abbreviation/name of your Hugging Face transformer architecture (e.b., bert, bart, etc..)</p></li>
-</ul>
-<ul>
-<li><strong><code>hf_tokenizer</code></strong> : <em><code>&lt;class 'transformers.tokenization_utils_base.PreTrainedTokenizerBase'&gt;</code></em>  <p>A Hugging Face tokenizer</p></li>
-</ul>
-<ul>
-<li><strong><code>ctx_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the context (where the answer is included) (default: 'context')</p></li>
-</ul>
-<ul>
-<li><strong><code>qst_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the question being asked (default: 'question')</p></li>
-</ul>
-<ul>
-<li><strong><code>ans_attr</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the actual answer (default: 'answer_text')</p></li>
-</ul>
-<ul>
-<li><strong><code>ans_start_char_idx</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em> <p>The attribute in your dataset that contains the actual answer (default: 'answer_text')</p></li>
-</ul>
-<ul>
-<li><strong><code>ans_end_char_idx</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>, <em>optional</em>   <p>The attribute in your dataset that contains the actual answer (default: 'answer_text')</p></li>
-</ul>
-<ul>
-<li><strong><code>keep_cols</code></strong> : <em><code>&lt;class 'list'&gt;</code></em>, <em>optional</em> <p>Other column data from the raw DataFrame you want to include in the processed DataFrame</p></li>
-</ul>
-<ul>
-<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any keyword arguments you want your Hugging Face tokenizer to use during tokenization</p></li>
-</ul>
-
-</div>
-
-</div>
-
-</div>
-</div>
 
 </div>
     {% endraw %}
@@ -467,11 +406,11 @@ datasets into a single dataset, and will indicate to which each example is assoc
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>answers</th>
-      <th>context</th>
       <th>id</th>
-      <th>question</th>
       <th>title</th>
+      <th>context</th>
+      <th>question</th>
+      <th>answers</th>
       <th>ans_start_char_idx</th>
       <th>answer_text</th>
       <th>ans_end_char_idx</th>
@@ -480,22 +419,22 @@ datasets into a single dataset, and will indicate to which each example is assoc
   <tbody>
     <tr>
       <th>0</th>
-      <td>{'answer_start': [269], 'text': ['in the late 1990s']}</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
       <td>56be85543aeaaa14008c9063</td>
-      <td>When did Beyonce start becoming popular?</td>
       <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
       <td>269</td>
       <td>in the late 1990s</td>
       <td>286</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>{'answer_start': [207], 'text': ['singing and dancing']}</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
       <td>56be85543aeaaa14008c9065</td>
-      <td>What areas did Beyonce compete in when she was growing up?</td>
       <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
       <td>207</td>
       <td>singing and dancing</td>
       <td>226</td>
@@ -520,16 +459,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span> <span class="o">=</span> <span class="n">pre_process_qa</span><span class="p">(</span>
-    <span class="n">squad_df</span><span class="p">,</span>
-    <span class="n">hf_arch</span><span class="p">,</span>
-    <span class="n">hf_tokenizer</span><span class="p">,</span>
-    <span class="n">keep_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">],</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
-<span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tok_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">}</span>
+<span class="n">preprocessor</span> <span class="o">=</span> <span class="n">QuestionAnsweringPreprocessor</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">id_attr</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">tok_kwargs</span><span class="o">=</span><span class="n">tok_kwargs</span><span class="p">)</span>
+<span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc_df</span><span class="p">))</span>
-<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -542,7 +477,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>2189
+<pre>3109
 </pre>
 </div>
 </div>
@@ -569,44 +504,113 @@ datasets into a single dataset, and will indicate to which each example is assoc
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>question</th>
+      <th>id</th>
+      <th>title</th>
       <th>context</th>
+      <th>question</th>
+      <th>answers</th>
+      <th>ans_start_char_idx</th>
       <th>answer_text</th>
+      <th>ans_end_char_idx</th>
       <th>has_answer</th>
       <th>ans_start_token_idx</th>
       <th>ans_end_token_idx</th>
-      <th>ans_start_char_idx</th>
-      <th>ans_end_char_idx</th>
-      <th>id</th>
-      <th>title</th>
+      <th>input_ids</th>
+      <th>attention_mask</th>
+      <th>offset_mapping</th>
+      <th>overflow_to_sample_mapping</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>When did Beyonce start becoming popular?</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>269</td>
       <td>in the late 1990s</td>
+      <td>287</td>
       <td>1</td>
       <td>84</td>
       <td>89</td>
-      <td>269</td>
-      <td>287</td>
+      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1634...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>0</th>
       <td>56be85543aeaaa14008c9063</td>
       <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>269</td>
+      <td>in the late 1990s</td>
+      <td>287</td>
+      <td>1</td>
+      <td>32</td>
+      <td>37</td>
+      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 11, 2499, 6, 1184, 6, 79, 3744, 11, 1337,...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>269</td>
+      <td>in the late 1990s</td>
+      <td>287</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 333, 1059, 65, 9, 5, 232, 18, 275, 12, 11...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>When did Beyonce start becoming popular?</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
-      <td>in the late 1990s</td>
-      <td>1</td>
-      <td>84</td>
-      <td>89</td>
-      <td>269</td>
-      <td>287</td>
-      <td>56be85543aeaaa14008c9063</td>
+      <td>56be85543aeaaa14008c9065</td>
       <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
+      <td>207</td>
+      <td>singing and dancing</td>
+      <td>227</td>
+      <td>1</td>
+      <td>77</td>
+      <td>80</td>
+      <td>[0, 653, 911, 222, 12674, 1755, 3511, 11, 77, 79, 21, 1197, 62, 116, 2, 2, 12674, 12695, 272, 35...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 10], [11, 14], [15, 20], [20, 22], [23, 30], [31, 33], [34, 38], [39, 42], ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>56be85543aeaaa14008c9065</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
+      <td>207</td>
+      <td>singing and dancing</td>
+      <td>227</td>
+      <td>1</td>
+      <td>30</td>
+      <td>33</td>
+      <td>[0, 653, 911, 222, 12674, 1755, 3511, 11, 77, 79, 21, 1197, 62, 116, 2, 2, 3390, 4, 8912, 8, 117...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 10], [11, 14], [15, 20], [20, 22], [23, 30], [31, 33], [34, 38], [39, 42], ...</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -631,14 +635,11 @@ datasets into a single dataset, and will indicate to which each example is assoc
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sampled_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sampled_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="n">test_example</span> <span class="o">=</span> <span class="n">row</span>
-    <span class="n">tok_d</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">test_example</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">test_example</span><span class="o">.</span><span class="n">has_answer</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="c1"># print(test_example.answer_text.strip())</span>
-        <span class="c1"># print(hf_tokenizer.decode(tok_d[&quot;input_ids&quot;][test_example.ans_start_token_idx : test_example.ans_end_token_idx]).strip())</span>
         <span class="n">test_eq</span><span class="p">(</span>
             <span class="n">test_example</span><span class="o">.</span><span class="n">answer_text</span><span class="p">,</span>
-            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">tok_d</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">test_example</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">test_eq</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -666,10 +667,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc2_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="p">[(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">has_answer</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">QuestionAnsweringPreprocessor</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">})</span>
+<span class="n">proc2_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
+<span class="n">proc2_df</span> <span class="o">=</span> <span class="n">proc2_df</span><span class="p">[(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">has_answer</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc2_df</span><span class="p">))</span>
-<span class="n">proc2_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">proc2_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -682,7 +685,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>1497
+<pre>731
 </pre>
 </div>
 </div>
@@ -709,44 +712,107 @@ datasets into a single dataset, and will indicate to which each example is assoc
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>question</th>
+      <th>id</th>
+      <th>title</th>
       <th>context</th>
+      <th>question</th>
+      <th>answers</th>
+      <th>ans_start_char_idx</th>
       <th>answer_text</th>
+      <th>ans_end_char_idx</th>
       <th>has_answer</th>
       <th>ans_start_token_idx</th>
       <th>ans_end_token_idx</th>
-      <th>ans_start_char_idx</th>
-      <th>ans_end_char_idx</th>
-      <th>id</th>
-      <th>title</th>
+      <th>input_ids</th>
+      <th>attention_mask</th>
+      <th>offset_mapping</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>When did Beyonce start becoming popular?</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>269</td>
       <td>in the late 1990s</td>
+      <td>287</td>
       <td>1</td>
       <td>84</td>
       <td>89</td>
-      <td>269</td>
-      <td>287</td>
-      <td>56be85543aeaaa14008c9063</td>
-      <td>Beyoncé</td>
+      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1634...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>When did Beyonce start becoming popular?</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny's Child. Managed by her father, Mathew Knowles, the group became one of the world's best-selling girl groups of all time. Their hiatus saw the release of Beyoncé's debut album, Dangerously in Love (2003), which established her as a solo artist worldwide, earned five G...</td>
-      <td>in the late 1990s</td>
-      <td>1</td>
-      <td>84</td>
-      <td>89</td>
-      <td>269</td>
-      <td>287</td>
-      <td>56be85543aeaaa14008c9063</td>
+      <td>56be85543aeaaa14008c9065</td>
       <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
+      <td>207</td>
+      <td>singing and dancing</td>
+      <td>227</td>
+      <td>1</td>
+      <td>77</td>
+      <td>80</td>
+      <td>[0, 653, 911, 222, 12674, 1755, 3511, 11, 77, 79, 21, 1197, 62, 116, 2, 2, 12674, 12695, 272, 35...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 10], [11, 14], [15, 20], [20, 22], [23, 30], [31, 33], [34, 38], [39, 42], ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>56bf6b0f3aeaaa14008c9601</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>In what city and state did Beyonce  grow up?</td>
+      <td>{'text': ['Houston, Texas'], 'answer_start': [166]}</td>
+      <td>166</td>
+      <td>Houston, Texas</td>
+      <td>181</td>
+      <td>1</td>
+      <td>69</td>
+      <td>72</td>
+      <td>[0, 96, 99, 343, 8, 194, 222, 12674, 1755, 1437, 1733, 62, 116, 1437, 2, 2, 12674, 12695, 272, 3...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 2], [3, 7], [8, 12], [13, 16], [17, 22], [23, 26], [27, 32], [32, 34], [35, 35], [3...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>56bf6b0f3aeaaa14008c9602</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>In which decade did Beyonce become famous?</td>
+      <td>{'text': ['late 1990s'], 'answer_start': [276]}</td>
+      <td>276</td>
+      <td>late 1990s</td>
+      <td>287</td>
+      <td>1</td>
+      <td>87</td>
+      <td>90</td>
+      <td>[0, 96, 61, 2202, 222, 12674, 1755, 555, 3395, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 2], [3, 8], [9, 15], [16, 19], [20, 25], [25, 27], [28, 34], [35, 41], [41, 42], [0...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>56bf6b0f3aeaaa14008c9603</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>In what R&amp;B group was she the lead singer?</td>
+      <td>{'text': ['Destiny's Child'], 'answer_start': [320]}</td>
+      <td>320</td>
+      <td>Destiny's Child</td>
+      <td>336</td>
+      <td>1</td>
+      <td>103</td>
+      <td>106</td>
+      <td>[0, 96, 99, 248, 947, 387, 333, 21, 79, 5, 483, 3250, 116, 2, 2, 12674, 12695, 272, 354, 6591, 1...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 2], [3, 7], [8, 9], [9, 10], [10, 11], [12, 17], [18, 21], [22, 25], [26, 29], [30,...</td>
     </tr>
   </tbody>
 </table>
@@ -784,7 +850,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L191" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
+<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L142" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -822,7 +888,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L196" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
+<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L147" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -838,6 +904,12 @@ decode the dictionary produced as a byproduct of the tokenization process in the
 </ul>
 <ul>
 <li><strong><code>hf_model</code></strong> : <em><code>&lt;class 'transformers.modeling_utils.PreTrainedModel'&gt;</code></em>   <p>A Hugging Face model</p></li>
+</ul>
+<ul>
+<li><strong><code>is_pretokenized</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>If you are passing in the "input_ids" as your inputs, set `is_pretokenized` = True</p></li>
+</ul>
+<ul>
+<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss</p></li>
 </ul>
 <ul>
 <li><strong><code>max_length</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em> <p>To control the length of the padding/truncation. It can be an integer or None,
@@ -858,9 +930,6 @@ See [Everything you always wanted to know about padding and truncation](https://
 <ul>
 <li><strong><code>is_split_into_words</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>The `is_split_into_words` argument applied to your `hf_tokenizer` during tokenization. Set this to `True`
 if your inputs are pre-tokenized (not numericalized)</p></li>
-</ul>
-<ul>
-<li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss</p></li>
 </ul>
 <ul>
 <li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs</p></li>
@@ -897,7 +966,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_dummy_token_idx" class="doc_header"><code>get_dummy_token_idx</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L269" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dummy_token_idx</code>(<strong><code>r</code></strong>)</p>
+<h4 id="get_dummy_token_idx" class="doc_header"><code>get_dummy_token_idx</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L226" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_dummy_token_idx</code>(<strong><code>r</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -923,7 +992,53 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Example-1:-Using-a-pre-processed-dataset">Example 1: Using a pre-processed dataset<a class="anchor-link" href="#Example-1:-Using-a-pre-processed-dataset"> </a></h3>
+<h2 id="Examples">Examples<a class="anchor-link" href="#Examples"> </a></h2><p>The following eamples demonstrate several approaches to construct your <code>DataBlock</code> for question answering tasks using the mid-level API</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Using-the-mid-level-API">Using the mid-level API<a class="anchor-link" href="#Using-the-mid-level-API"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Batch-Time-Tokenization">Batch-Time Tokenization<a class="anchor-link" href="#Batch-Time-Tokenization"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-1:-Get-your-Hugging-Face-objects.">Step 1: Get your Hugging Face objects.<a class="anchor-link" href="#Step-1:-Get-your-Hugging-Face-objects."> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;distilroberta-base&quot;</span>
+<span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span> <span class="o">=</span> <span class="n">BLURR</span><span class="o">.</span><span class="n">get_hf_objects</span><span class="p">(</span><span class="n">pretrained_model_name</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">AutoModelForQuestionAnswering</span><span class="p">)</span>
+
+<span class="n">max_seq_len</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-2:-Create-your-DataBlock">Step 2: Create your <code>DataBlock</code><a class="anchor-link" href="#Step-2:-Create-your-DataBlock"> </a></h5>
 </div>
 </div>
 </div>
@@ -942,7 +1057,6 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
 <span class="p">)</span>
-
 
 <span class="k">def</span> <span class="nf">get_ans_and_start_end_char_idxs</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
     <span class="n">start</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -967,6 +1081,12 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-3:-Build-your-DataLoaders">Step 3: Build your <code>DataLoaders</code><a class="anchor-link" href="#Step-3:-Build-your-DataLoaders"> </a></h5>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1116,31 +1236,31 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Where did Beyoncé exclusively release her single, Formation? On February 6, 2016, one day before her performance at the Super Bowl, Beyoncé released a new single exclusively on music streaming service Tidal called "Formation".</td>
-      <td>True</td>
-      <td>(41, 43)</td>
-      <td>Tidal</td>
+      <td>Which prominent star felt the 2009 Female Video of the Year award should have went to Beyoncé instead of Taylor Swift? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the ma</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
     </tr>
     <tr>
       <th>1</th>
-      <td>In what year did Frédéric officially acquire French citizenship? Chopin arrived in Paris in late September 1831; he would never return to Poland, thus becoming one of many expatriates of the Polish Great Emigration. In France he used the French versions of his given names, and after receiving French citizenship in 1835, he travelled on a French passport. However, Chopin remained close to his fellow Poles in exile as friends and confidants and he never felt fully comfortable speaking French. Cho</td>
-      <td>True</td>
-      <td>(68, 70)</td>
-      <td>1835</td>
+      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sell</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
     </tr>
     <tr>
       <th>2</th>
-      <td>What did Beyonce's Fashion Diva  feature? In 2005, Beyoncé teamed up with House of Brands, a shoe company, to produce a range of footwear for House of Deréon. In January 2008, Starwave Mobile launched Beyoncé Fashion Diva, a "high-style" mobile game with a social networking component, featuring the House of Deréon collection. In July 2009, Beyoncé and her mother launched a new junior apparel label, Sasha Fierce for Deréon, for back-to-school selling. The collection included sportswear, outerwea</td>
-      <td>True</td>
-      <td>(73, 79)</td>
-      <td>House of Deréon collection</td>
+      <td>Which singer beat out Beyonce for best video performance? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copi</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
     </tr>
     <tr>
       <th>3</th>
-      <td>How many Grammys has Beyoncé won? Beyoncé has won 20 Grammy Awards, both as a solo artist and member of Destiny's Child, making her the second most honored female artist by the Grammys, behind Alison Krauss and the most nominated woman in Grammy Award history with 52 nominations. "Single Ladies (Put a Ring on It)" won Song of the Year in 2010 while "Say My Name" and "Crazy in Love" had previously won Best R&amp;B Song. Dangerously in Love, B'Day and I Am... Sasha Fierce have all won Best Contempora</td>
+      <td>When did Beyoncé get married? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copies in its first week, debuti</td>
       <td>True</td>
-      <td>(16, 17)</td>
-      <td>20</td>
+      <td>(11, 15)</td>
+      <td>April 4, 2008</td>
     </tr>
   </tbody>
 </table>
@@ -1156,7 +1276,163 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Example-2:-Batch-time-targets">Example 2: Batch-time targets<a class="anchor-link" href="#Example-2:-Batch-time-targets"> </a></h3>
+<h4 id="Pre-tokenized/numericalized">Pre-tokenized/numericalized<a class="anchor-link" href="#Pre-tokenized/numericalized"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-1a:-Get-your-Hugging-Face-objects.">Step 1a: Get your Hugging Face objects.<a class="anchor-link" href="#Step-1a:-Get-your-Hugging-Face-objects."> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;roberta-base&quot;</span>  <span class="c1">#&#39;xlm-mlm-ende-1024&#39;</span>
+<span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span> <span class="o">=</span> <span class="n">BLURR</span><span class="o">.</span><span class="n">get_hf_objects</span><span class="p">(</span><span class="n">pretrained_model_name</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">AutoModelForQuestionAnswering</span><span class="p">)</span>
+
+<span class="n">max_seq_len</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">vocab</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">max_seq_len</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-1b.-Preprocess-dataset">Step 1b. Preprocess dataset<a class="anchor-link" href="#Step-1b.-Preprocess-dataset"> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">QuestionAnsweringPreprocessor</span><span class="p">(</span>
+    <span class="n">hf_tokenizer</span><span class="p">,</span>
+    <span class="n">id_attr</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">ctx_attr</span><span class="o">=</span><span class="s2">&quot;context&quot;</span><span class="p">,</span>
+    <span class="n">qst_attr</span><span class="o">=</span><span class="s2">&quot;question&quot;</span><span class="p">,</span>
+    <span class="n">ans_attr</span><span class="o">=</span><span class="s2">&quot;answer_text&quot;</span><span class="p">,</span>
+    <span class="n">ans_start_char_idx</span><span class="o">=</span><span class="s2">&quot;ans_start_char_idx&quot;</span><span class="p">,</span>
+    <span class="n">ans_end_char_idx</span><span class="o">=</span><span class="s2">&quot;ans_end_char_idx&quot;</span><span class="p">,</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
+<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>title</th>
+      <th>context</th>
+      <th>question</th>
+      <th>answers</th>
+      <th>ans_start_char_idx</th>
+      <th>answer_text</th>
+      <th>ans_end_char_idx</th>
+      <th>has_answer</th>
+      <th>ans_start_token_idx</th>
+      <th>ans_end_token_idx</th>
+      <th>input_ids</th>
+      <th>attention_mask</th>
+      <th>offset_mapping</th>
+      <th>overflow_to_sample_mapping</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>269</td>
+      <td>in the late 1990s</td>
+      <td>287</td>
+      <td>1</td>
+      <td>84</td>
+      <td>89</td>
+      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1634...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>269</td>
+      <td>in the late 1990s</td>
+      <td>287</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 1816, 1134, 9, 70, 86, 4, 2667, 25224, 79...</td>
+      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
+      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-2:-Create-your-DataBlock">Step 2: Create your <code>DataBlock</code><a class="anchor-link" href="#Step-2:-Create-your-DataBlock"> </a></h5>
 </div>
 </div>
 </div>
@@ -1172,9 +1448,10 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     <span class="n">hf_config</span><span class="p">,</span>
     <span class="n">hf_tokenizer</span><span class="p">,</span>
     <span class="n">hf_model</span><span class="p">,</span>
+    <span class="n">is_pretokenized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">,</span>
     <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;add_special_tokens&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
 <span class="p">)</span>
 
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
@@ -1185,17 +1462,10 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">get_ans_and_start_end_char_idxs</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;answer_start&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">answer_text</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">answers</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">answer_text</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">answer_text</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
-
-
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
     <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
-    <span class="n">get_x</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">question</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">context</span><span class="p">),</span>
-    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">get_ans_and_start_end_char_idxs</span><span class="p">,</span> <span class="n">get_dummy_token_idx</span><span class="p">,</span> <span class="n">get_dummy_token_idx</span><span class="p">],</span>
+    <span class="n">get_x</span><span class="o">=</span><span class="n">ItemGetter</span><span class="p">(</span><span class="s2">&quot;input_ids&quot;</span><span class="p">),</span>
+    <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">ItemGetter</span><span class="p">(</span><span class="s2">&quot;has_answer&quot;</span><span class="p">),</span> <span class="n">ItemGetter</span><span class="p">(</span><span class="s2">&quot;ans_start_token_idx&quot;</span><span class="p">),</span> <span class="n">ItemGetter</span><span class="p">(</span><span class="s2">&quot;ans_end_token_idx&quot;</span><span class="p">)],</span>
     <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">(),</span>
     <span class="n">n_inp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <span class="p">)</span>
@@ -1208,6 +1478,12 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-3:-Build-your-DataLoaders">Step 3: Build your <code>DataLoaders</code><a class="anchor-link" href="#Step-3:-Build-your-DataLoaders"> </a></h5>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1215,7 +1491,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span> <span class="o">=</span> <span class="n">dblock</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">(</span><span class="n">squad_df</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span> <span class="o">=</span> <span class="n">dblock</span><span class="o">.</span><span class="n">dataloaders</span><span class="p">(</span><span class="n">proc_df</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dls</span><span class="o">.</span><span class="n">valid</span><span class="p">)</span>
 </pre></div>
 
@@ -1231,7 +1507,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(200, 50)</pre>
+<pre>(438, 110)</pre>
 </div>
 
 </div>
@@ -1265,7 +1541,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(4, 7, 4, 4)</pre>
+<pre>(4, 3, 4, 4)</pre>
 </div>
 
 </div>
@@ -1316,7 +1592,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">=</span><span class="n">dls</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">trunc_at</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dls</span><span class="o">.</span><span class="n">show_batch</span><span class="p">(</span><span class="n">dataloaders</span><span class="o">=</span><span class="n">dls</span><span class="p">,</span> <span class="n">max_n</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1343,28 +1619,28 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Which prominent star felt the 2009 Female Video of the Year award should have went to Beyoncé instead of Taylor Swift?, Beyoncé embarked on the I Am... World Tour, her second headlining worldwide concert tour, consisting of 108 shows, grossing $119.5 million.</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
+      <td>What song won Best R&amp;B Performance in the 43 Annual Grammy Awards? Best R&amp;B/Soul Album of the Year, Best R&amp;B/Soul or Rap New Artist, and Best R&amp;B/Soul Single for "No, No, No". The group released their multi-platinum second album The Writing's on the Wall in 1999. The record features some of the group's most widely known songs such as "Bills, Bills, Bills", the group's first number-one single, "Jumpin' Jumpin'" and "Say My Name", which became their most successful song at the</td>
+      <td>True</td>
+      <td>(115, 118)</td>
+      <td>Say My Name</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>In 2009, Beyonce started her second world tour and grossed how much money? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sel</td>
+      <td>What title did Complex award Beyoncé? cities around the world, including New York, Washington, D.C., Amsterdam, Bangkok, Hollywood and Sydney.</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>2</th>
-      <td>In 2009, Beyonce started her second world tour and grossed how much money?, debuting atop the Billboard 200, and giving Beyoncé her third consecutive number-one album in the US. The album featured the number-one song "Single Ladies (Put a Ring on It)" and the top-five songs "If I Were a Boy" and "Halo". Achieving the accomplishment of becoming her longest-running Hot 100 single in her career, "Halo"'s success in the US helped Beyoncé attain more top-ten singles on the list than any other woman</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
+      <td>Beyonce's grandma's name was? Beyoncé and her mother introduced House of Deréon, a contemporary women's fashion line, in 2005. The concept is inspired by three generations of women in their family, the name paying tribute to Beyoncé's grandmother, Agnèz Deréon, a respected seamstress. According to Tina, the overall style of the line best reflects her and Beyoncé's taste and style. Beyoncé and her mother founded their family's company Beyond Productions, which provides the licensing and brand management for House of Deréon, and its junior collection, Deréon. House</td>
+      <td>True</td>
+      <td>(56, 63)</td>
+      <td>Agnèz Deréon</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>In 2009, Beyonce started her second world tour and grossed how much money?s. It also included the successful "Sweet Dreams", and singles "Diva", "Ego", "Broken-Hearted Girl" and "Video Phone". The music video for "Single Ladies" has been parodied and imitated around the world, spawning the "first major dance craze" of the Internet age according to the Toronto Star. The video has won several awards, including Best Video at the 2009 MTV Europe Music Awards, the 2009 Scottish MOBO Awards, and the</td>
+      <td>At what age did Frédéric depart from Poland? November 1830 Uprising.</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>

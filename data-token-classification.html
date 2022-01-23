@@ -1292,13 +1292,74 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="How-to-use">How to use<a class="anchor-link" href="#How-to-use"> </a></h3>
+<h2 id="Examples">Examples<a class="anchor-link" href="#Examples"> </a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Using-the-mid-level-API">Using the mid-level API<a class="anchor-link" href="#Using-the-mid-level-API"> </a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Batch-Time-Tokenization">Batch-Time Tokenization<a class="anchor-link" href="#Batch-Time-Tokenization"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-1:-Get-your-Hugging-Face-objects.">Step 1: Get your Hugging Face objects.<a class="anchor-link" href="#Step-1:-Get-your-Hugging-Face-objects."> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;distilroberta-base&quot;</span>
+<span class="n">n_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span> <span class="o">=</span> <span class="n">BLURR</span><span class="o">.</span><span class="n">get_hf_objects</span><span class="p">(</span>
+    <span class="n">pretrained_model_name</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">AutoModelForTokenClassification</span><span class="p">,</span> <span class="n">config_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;num_labels&quot;</span><span class="p">:</span> <span class="n">n_labels</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">hf_arch</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf_config</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf_model</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(&#39;roberta&#39;,
+ transformers.models.roberta.configuration_roberta.RobertaConfig,
+ transformers.models.roberta.tokenization_roberta_fast.RobertaTokenizerFast,
+ transformers.models.roberta.modeling_roberta.RobertaForTokenClassification)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-2:-Create-your-DataBlock">Step 2: Create your <code>DataBlock</code><a class="anchor-link" href="#Step-2:-Create-your-DataBlock"> </a></h5>
 </div>
 </div>
 </div>
@@ -1322,6 +1383,12 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-3:-Build-your-DataLoaders">Step 3: Build your <code>DataLoaders</code><a class="anchor-link" href="#Step-3:-Build-your-DataLoaders"> </a></h5>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1378,7 +1445,7 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(2, torch.Size([4, 88]), torch.Size([4, 88]))</pre>
+<pre>(2, torch.Size([4, 156]), torch.Size([4, 156]))</pre>
 </div>
 
 </div>
@@ -1427,19 +1494,19 @@ equavlient of fast tokenizer's `word_ids``</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[('15', 'O'), ('-', 'O'), ('Christian', 'B-PER'), ('Cullen', 'I-PER'), (',', 'O'), ('14', 'O'), ('-', 'O'), ('Jeff', 'B-PER'), ('Wilson', 'I-PER'), (',', 'O'), ('13', 'O'), ('-', 'O'), ('Walter', 'B-PER'), ('Little', 'I-PER'), (',', 'O'), ('12', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('Bunce', 'I-PER'), (',', 'O')]</td>
+      <td>[('MARKET', 'O'), ('TALK', 'O'), ('-', 'O'), ('USDA', 'B-ORG'), ('net', 'O'), ('change', 'O'), ('in', 'O'), ('weekly', 'O'), ('export', 'O'), ('commitments', 'O'), ('for', 'O'), ('the', 'O'), ('week', 'O'), ('ended', 'O'), ('August', 'O'), ('22', 'O'), (',', 'O'), ('includes', 'O'), ('old', 'O'), ('crop', 'O')]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('But', 'O'), ('analysts', 'O'), ('noted', 'O'), ('that', 'O'), ('Sierra', 'B-ORG'), ('still', 'O'), ('has', 'O'), ('much', 'O'), ('painful', 'O'), ('work', 'O'), ('ahead', 'O'), ('of', 'O'), ('it', 'O'), (',', 'O'), ('including', 'O'), ('cutting', 'O'), ('as', 'O'), ('many', 'O'), ('as', 'O'), ('150', 'O')]</td>
+      <td>[('Captain', 'O'), ('Firmin', 'B-PER'), ('Gatera', 'I-PER'), (',', 'O'), ('spokesman', 'O'), ('for', 'O'), ('the', 'O'), ('Tutsi-dominated', 'B-MISC'), ('Rwandan', 'B-MISC'), ('army', 'O'), (',', 'O'), ('told', 'O'), ('Reuters', 'B-ORG'), ('in', 'O'), ('Kigali', 'B-LOC'), ('that', 'O'), ('17', 'O'), ('of', 'O'), ('the', 'O'), ('28', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('The', 'O'), ('Pirates', 'B-ORG'), (',', 'O'), ('who', 'O'), ('conceded', 'O'), ('earlier', 'O'), ('this', 'O'), ('week', 'O'), ('they', 'O'), ('would', 'O'), ('be', 'O'), ('forced', 'O'), ('to', 'O'), ('trim', 'O'), ('salary', 'O'), ('from', 'O'), ('next', 'O'), ('season', 'O'), ("'s", 'O'), ('payroll', 'O')]</td>
+      <td>[('The', 'O'), ('Spaniard', 'B-MISC'), ('has', 'O'), ('not', 'O'), ('played', 'O'), ('for', 'O'), ('nearly', 'O'), ('a', 'O'), ('year', 'O'), ('because', 'O'), ('of', 'O'), ('rheumatoid', 'O'), ('arthritis', 'O'), ('in', 'O'), ('both', 'O'), ('his', 'O'), ('feet', 'O'), (',', 'O'), ('and', 'O'), ('organisers', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('Lebed', 'B-PER'), (',', 'O'), ('who', 'O'), ('met', 'O'), ('Russian', 'B-MISC'), ('Prime', 'O'), ('Minister', 'O'), ('Viktor', 'B-PER'), ('Chernomyrdin', 'I-PER'), ('on', 'O'), ('Monday', 'O'), ('to', 'O'), ('discuss', 'O'), ('the', 'O'), ('progress', 'O'), ('he', 'O'), ('made', 'O'), ('on', 'O'), ('a', 'O'), ('political', 'O')]</td>
+      <td>[('Armed', 'O'), ('hijackers', 'O'), ('believed', 'O'), ('to', 'O'), ('be', 'O'), ('Iraqis', 'B-MISC'), ('released', 'O'), ('between', 'O'), ('60', 'O'), ('and', 'O'), ('70', 'O'), ('people', 'O'), ('on', 'O'), ('Tuesday', 'O'), ('from', 'O'), ('a', 'O'), ('Sudan', 'B-ORG'), ('Airways', 'I-ORG'), ('plane', 'O'), ('carrying', 'O')]</td>
     </tr>
   </tbody>
 </table>
@@ -1457,6 +1524,61 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Pre-tokenized">Pre-tokenized<a class="anchor-link" href="#Pre-tokenized"> </a></h4><p>If special tokens are included in your pre-processed inputs (as is the case when using Blurr's <a href="/blurr/data-token-classification.html#TokenClassificationPreprocessor"><code>TokenClassificationPreprocessor</code></a>), make sure you tell the <a href="/blurr/data-token-classification.html#HF_TokenClassBeforeBatchTransform"><code>HF_TokenClassBeforeBatchTransform</code></a> to <strong><em>not</em></strong> include them (as they are already there).</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-1b:-Get-your-Hugging-Face-objects.">Step 1b: Get your Hugging Face objects.<a class="anchor-link" href="#Step-1b:-Get-your-Hugging-Face-objects."> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pretrained_model_name</span> <span class="o">=</span> <span class="s2">&quot;distilroberta-base&quot;</span>
+<span class="n">n_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span> <span class="o">=</span> <span class="n">BLURR</span><span class="o">.</span><span class="n">get_hf_objects</span><span class="p">(</span>
+    <span class="n">pretrained_model_name</span><span class="p">,</span> <span class="n">model_cls</span><span class="o">=</span><span class="n">AutoModelForTokenClassification</span><span class="p">,</span> <span class="n">config_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;num_labels&quot;</span><span class="p">:</span> <span class="n">n_labels</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">hf_arch</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf_config</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">hf_model</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(&#39;roberta&#39;,
+ transformers.models.roberta.configuration_roberta.RobertaConfig,
+ transformers.models.roberta.tokenization_roberta_fast.RobertaTokenizerFast,
+ transformers.models.roberta.modeling_roberta.RobertaForTokenClassification)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-1b.-Preprocess-dataset">Step 1b. Preprocess dataset<a class="anchor-link" href="#Step-1b.-Preprocess-dataset"> </a></h5>
 </div>
 </div>
 </div>
@@ -1551,6 +1673,12 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-2:-Create-your-DataBlock">Step 2: Create your <code>DataBlock</code><a class="anchor-link" href="#Step-2:-Create-your-DataBlock"> </a></h5>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1580,6 +1708,12 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Step-3:-Build-your-DataLoaders">Step 3: Build your <code>DataLoaders</code><a class="anchor-link" href="#Step-3:-Build-your-DataLoaders"> </a></h5>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1682,15 +1816,15 @@ equavlient of fast tokenizer's `word_ids``</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('"', 'O'), ('We', 'O'), ('have', 'O'), ('no', 'O'), ('doubt', 'O'), ('that', 'O'), ('this', 'O'), ('is', 'O'), ('one', 'O'), ('of', 'O'), ('the', 'O'), ('rarest', 'O'), ('of', 'O'), ('the', 'O'), ('rare', 'O'), ('cases', 'O'), (',', 'O'), ('not', 'O'), ('merely', 'O'), ('due', 'O')]</td>
+      <td>[('The', 'O'), ('government-owned', 'O'), ('al-Ingaz', 'B-ORG'), ('al-Watani', 'I-ORG'), ('said', 'O'), ('the', 'O'), ('smugglers', 'O'), ('were', 'O'), ('caught', 'O'), ('in', 'O'), ('Banat', 'B-LOC'), ('in', 'O'), ('the', 'O'), ('eastern', 'O'), ('state', 'O'), ('of', 'O'), ('Kassala', 'B-LOC'), (',', 'O'), ('on', 'O'), ('the', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('"', 'O'), ('From', 'O'), ('here', 'O'), ('we', 'O'), ('will', 'O'), ('march', 'O'), ('to', 'O'), ('Islamabad', 'B-LOC'), ('and', 'O'), ('by', 'O'), ('God', 'B-PER'), ('we', 'O'), ('will', 'O'), ('not', 'O'), ('let', 'O'), ('Benazir', 'B-PER'), ('and', 'O'), ('(', 'O'), ('Bhutto', 'B-PER'), ("'s", 'O')]</td>
+      <td>[('Interior', 'O'), ('Minister', 'O'), ('Jean-Louis', 'B-PER'), ('Debre', 'I-PER'), (',', 'O'), ('under', 'O'), ('fire', 'O'), ('for', 'O'), ('staging', 'O'), ('secret', 'O'), ('talks', 'O'), ('with', 'O'), ('one', 'O'), ('of', 'O'), ('the', 'O'), ('largest', 'O'), ('of', 'O'), ('several', 'O'), ('rival', 'O'), ('underground', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('Mohammed', 'B-PER'), ('Saleh', 'I-PER'), (',', 'O'), ('director', 'O'), ('of', 'O'), ('the', 'O'), ('Egyptian', 'B-MISC'), ('Museum', 'O'), (',', 'O'), ('told', 'O'), ('Reuters', 'B-ORG'), ('television', 'O'), ('a', 'O'), ('U.S.', 'B-LOC'), ('team', 'O'), ('found', 'O'), ('the', 'O'), ('pots', 'O'), (',', 'O'), ('some', 'O')]</td>
+      <td>[('Defenders', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('de', 'I-PER'), ('Boer', 'I-PER'), ('(', 'O'), ('Ajax', 'B-ORG'), (')', 'O'), (',', 'O'), ('John', 'B-PER'), ('Veldman', 'I-PER'), ('(', 'O'), ('Ajax', 'B-ORG'), (')', 'O'), (',', 'O'), ('Jaap', 'B-PER'), ('Stam', 'I-PER'), ('(', 'O'), ('PSV', 'B-ORG'), (')', 'O')]</td>
     </tr>
   </tbody>
 </table>
