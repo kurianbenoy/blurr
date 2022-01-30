@@ -64,9 +64,9 @@ nb_path: "nbs/04_data-question-answering.ipynb"
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>What we&#39;re running with at the time this documentation was generated:
-torch: 1.10.1+cu102
+torch: 1.10.2+cu102
 fastai: 2.5.3
-transformers: 4.15.0
+transformers: 4.16.1
 </pre>
 </div>
 </div>
@@ -835,7 +835,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="HF_QuestionAnswerInput"><a href="/blurr/data-question-answering.html#HF_QuestionAnswerInput"><code>HF_QuestionAnswerInput</code></a><a class="anchor-link" href="#HF_QuestionAnswerInput"> </a></h3>
+<h3 id="QuestionAnswerTextInput"><a href="/blurr/data-question-answering.html#QuestionAnswerTextInput"><code>QuestionAnswerTextInput</code></a><a class="anchor-link" href="#QuestionAnswerTextInput"> </a></h3>
 </div>
 </div>
 </div>
@@ -850,7 +850,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QuestionAnswerInput" class="doc_header"><code>class</code> <code>HF_QuestionAnswerInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L142" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QuestionAnswerInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BaseInput"><code>HF_BaseInput</code></a></p>
+<h2 id="QuestionAnswerTextInput" class="doc_header"><code>class</code> <code>QuestionAnswerTextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L142" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QuestionAnswerTextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -873,7 +873,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="HF_QABeforeBatchTransform"><a href="/blurr/data-question-answering.html#HF_QABeforeBatchTransform"><code>HF_QABeforeBatchTransform</code></a><a class="anchor-link" href="#HF_QABeforeBatchTransform"> </a></h3>
+<h3 id="QABatchTokenizeTransform"><a href="/blurr/data-question-answering.html#QABatchTokenizeTransform"><code>QABatchTokenizeTransform</code></a><a class="anchor-link" href="#QABatchTokenizeTransform"> </a></h3>
 </div>
 </div>
 </div>
@@ -888,7 +888,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="HF_QABeforeBatchTransform" class="doc_header"><code>class</code> <code>HF_QABeforeBatchTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L147" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>HF_QABeforeBatchTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#HF_BeforeBatchTransform"><code>HF_BeforeBatchTransform</code></a></p>
+<h2 id="QABatchTokenizeTransform" class="doc_header"><code>class</code> <code>QABatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L147" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QABatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -1049,10 +1049,10 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">HF_QABeforeBatchTransform</span><span class="p">(</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">QABatchTokenizeTransform</span><span class="p">(</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">max_seq_len</span><span class="p">)</span>
 
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">HF_TextBlock</span><span class="p">(</span><span class="n">before_batch_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">HF_QuestionAnswerInput</span><span class="p">),</span>
+    <span class="n">TextBlock</span><span class="p">(</span><span class="n">batch_tokenize_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">QuestionAnswerTextInput</span><span class="p">),</span>
     <span class="kc">None</span><span class="p">,</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
@@ -1243,24 +1243,24 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>The video for what song won Beyoncé the 2009 MTV Video of the Year award? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sell</td>
+      <td>For which decade, did Beyonce have more top ten songs than any other woman? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", se</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Which singer beat out Beyonce for best video performance? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copi</td>
+      <td>In 2009, Beyonce started her second world tour and grossed how much money? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", sel</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>3</th>
-      <td>When did Beyoncé get married? On April 4, 2008, Beyoncé married Jay Z. She publicly revealed their marriage in a video montage at the listening party for her third studio album, I Am... Sasha Fierce, in Manhattan's Sony Club on October 22, 2008. I Am... Sasha Fierce was released on November 18, 2008 in the United States. The album formally introduces Beyoncé's alter ego Sasha Fierce, conceived during the making of her 2003 single "Crazy in Love", selling 482,000 copies in its first week, debuti</td>
+      <td>Beyonce beat out which musical artists for most paid between June 2007 and June 2008? Forbes magazine began reporting on Beyoncé's earnings in 2008, calculating that the $80 million earned between June 2007 to June 2008, for her music, tour, films and clothing line made her the world's best-paid music personality at the time, above Madonna and Celine Dion. They placed her fourth on the Celebrity 100 list in 2009 and ninth on the "Most Powerful Women in the World" list in 2010. The following yea</td>
       <td>True</td>
-      <td>(11, 15)</td>
-      <td>April 4, 2008</td>
+      <td>(71, 76)</td>
+      <td>Madonna and Celine Dion</td>
     </tr>
   </tbody>
 </table>
@@ -1443,7 +1443,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">HF_QABeforeBatchTransform</span><span class="p">(</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">before_batch_tfm</span> <span class="o">=</span> <span class="n">QABatchTokenizeTransform</span><span class="p">(</span>
     <span class="n">hf_arch</span><span class="p">,</span>
     <span class="n">hf_config</span><span class="p">,</span>
     <span class="n">hf_tokenizer</span><span class="p">,</span>
@@ -1455,7 +1455,7 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 <span class="p">)</span>
 
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">HF_TextBlock</span><span class="p">(</span><span class="n">before_batch_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">HF_QuestionAnswerInput</span><span class="p">),</span>
+    <span class="n">TextBlock</span><span class="p">(</span><span class="n">batch_tokenize_tfm</span><span class="o">=</span><span class="n">before_batch_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">QuestionAnswerTextInput</span><span class="p">),</span>
     <span class="kc">None</span><span class="p">,</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
     <span class="n">CategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">vocab</span><span class="p">),</span>
@@ -1619,31 +1619,31 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>What song won Best R&amp;B Performance in the 43 Annual Grammy Awards? Best R&amp;B/Soul Album of the Year, Best R&amp;B/Soul or Rap New Artist, and Best R&amp;B/Soul Single for "No, No, No". The group released their multi-platinum second album The Writing's on the Wall in 1999. The record features some of the group's most widely known songs such as "Bills, Bills, Bills", the group's first number-one single, "Jumpin' Jumpin'" and "Say My Name", which became their most successful song at the</td>
+      <td>Of the individuals that became intimate with Frédéric during their stay at the family apartments, which two became part of Frédéric's social environment in Paris? Four boarders at his parents' apartments became Chopin's intimates: Tytus Woyciechowski, Jan Nepomucen Białobłocki, Jan Matuszyński and Julian Fontana; the latter two would become part of his Paris milieu. He was friendly with members of Warsaw's young artistic and intellectual world, including Fontana, Józef Bohdan Zales</td>
       <td>True</td>
-      <td>(115, 118)</td>
-      <td>Say My Name</td>
+      <td>(77, 88)</td>
+      <td>Jan Matuszyński and Julian Fontana</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>What title did Complex award Beyoncé? cities around the world, including New York, Washington, D.C., Amsterdam, Bangkok, Hollywood and Sydney.</td>
+      <td>For what does Beyonce receive praise?ber of the Daily News and Stephanie Classen of Star Phoenix both praised her strong voice and her stage presence.</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Beyonce's grandma's name was? Beyoncé and her mother introduced House of Deréon, a contemporary women's fashion line, in 2005. The concept is inspired by three generations of women in their family, the name paying tribute to Beyoncé's grandmother, Agnèz Deréon, a respected seamstress. According to Tina, the overall style of the line best reflects her and Beyoncé's taste and style. Beyoncé and her mother founded their family's company Beyond Productions, which provides the licensing and brand management for House of Deréon, and its junior collection, Deréon. House</td>
-      <td>True</td>
-      <td>(56, 63)</td>
-      <td>Agnèz Deréon</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>At what age did Frédéric depart from Poland? November 1830 Uprising.</td>
+      <td>Who gave Chopin instruction on how to play the organ?, the "eolomelodicon", and on this instrument in May 1825 he performed his own improvisation and part of a concerto by Moscheles. The success of this concert led to an invitation to give a similar recital on the instrument before Tsar Alexander I, who was visiting Warsaw; the Tsar presented him with a diamond ring. At a subsequent eolomelodicon concert on 10 June 1825, Chopin performed his Rondo Op. 1. This was the first of his works to be commercially published and</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>For what does Beyonce receive praise? Beyoncé has received praise for her stage presence and voice during live performances. Jarett Wieselman of the New York Post placed her at number one on her list of the Five Best Singer/Dancers. According to Barbara Ellen of The Guardian Beyoncé is the most in-charge female artist she's seen onstage, while Alice Jones of The Independent wrote she "takes her role as entertainer so seriously she's almost too good." The ex-President of Def Jam L.A. Reid has described Beyoncé as the greatest entertainer alive. Jim Farber of</td>
+      <td>True</td>
+      <td>(18, 20)</td>
+      <td>stage presence</td>
     </tr>
   </tbody>
 </table>
