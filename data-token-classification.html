@@ -66,7 +66,7 @@ nb_path: "nbs/03_data-token-classification.ipynb"
 <pre>What we&#39;re running with at the time this documentation was generated:
 torch: 1.10.2+cu102
 fastai: 2.5.3
-transformers: 4.16.1
+transformers: 4.16.2
 </pre>
 </div>
 </div>
@@ -1503,15 +1503,15 @@ equavlient of fast tokenizer's `word_ids``</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('Sanchez', 'B-PER'), ('Vicario', 'I-PER'), (',', 'O'), ('runner-up', 'O'), ('to', 'O'), ('Graf', 'B-PER'), ('at', 'O'), ('the', 'O'), ('French', 'B-MISC'), ('Open', 'I-MISC'), ('and', 'O'), ('Wimbledon', 'B-MISC'), (',', 'O'), ('begins', 'O'), ('play', 'O'), ('against', 'O'), ('a', 'O'), ('qualifier', 'O'), ('in', 'O'), ('a', 'O')]</td>
+      <td>[('15', 'O'), ('-', 'O'), ('Christian', 'B-PER'), ('Cullen', 'I-PER'), (',', 'O'), ('14', 'O'), ('-', 'O'), ('Jeff', 'B-PER'), ('Wilson', 'I-PER'), (',', 'O'), ('13', 'O'), ('-', 'O'), ('Walter', 'B-PER'), ('Little', 'I-PER'), (',', 'O'), ('12', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('Bunce', 'I-PER'), (',', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('"', 'O'), ('The', 'O'), ('13-year-old', 'O'), ('girl', 'O'), ('tried', 'O'), ('to', 'O'), ('extract', 'O'), ('60', 'O'), ('and', 'O'), ('70', 'O'), ('zlotys', 'O'), ('(', 'O'), ('$', 'O'), ('22', 'O'), ('and', 'O'), ('$', 'O'), ('26', 'O'), (')', 'O'), ('from', 'O'), ('two', 'O')]</td>
+      <td>[('McCurry', 'B-PER'), ('said', 'O'), ('that', 'O'), ('when', 'O'), ('Clinton', 'B-PER'), ('delivers', 'O'), ('his', 'O'), ('acceptance', 'O'), ('address', 'O'), ('on', 'O'), ('Thursday', 'O'), ('night', 'O'), ('to', 'O'), ('fellow', 'O'), ('Democrats', 'B-MISC'), ('and', 'O'), ('a', 'O'), ('national', 'O'), ('television', 'O'), ('audience', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('The', 'O'), ('unseeded', 'O'), ('Swede', 'B-MISC'), ('struck', 'O'), ('quickly', 'O'), (',', 'O'), ('breaking', 'O'), ('Krajicek', 'B-PER'), ('in', 'O'), ('the', 'O'), ('first', 'O'), ('game', 'O'), ('and', 'O'), ('never', 'O'), ('let', 'O'), ('loose', 'O'), ('his', 'O'), ('grip', 'O'), ('on', 'O'), ('the', 'O')]</td>
+      <td>[('Showers', 'O'), ('and', 'O'), ('rain', 'O'), ('0.25-1.00', 'O'), ('inch', 'O'), ('(', 'O'), ('6-25', 'O'), ('mm', 'O'), (')', 'O'), ('and', 'O'), ('locally', 'O'), ('heavier', 'O'), ('through', 'O'), ('most', 'O'), ('of', 'O'), ('central', 'O'), ('and', 'O'), ('south', 'O'), ('central', 'O'), ('India', 'B-LOC')]</td>
     </tr>
   </tbody>
 </table>
@@ -1773,7 +1773,7 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(2, torch.Size([4, 128]), torch.Size([4, 128]))</pre>
+<pre>(2, torch.Size([4, 88]), torch.Size([4, 88]))</pre>
 </div>
 
 </div>
@@ -1815,19 +1815,19 @@ equavlient of fast tokenizer's `word_ids``</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[('MARKET', 'O'), ('TALK', 'O'), ('-', 'O'), ('USDA', 'B-ORG'), ('net', 'O'), ('change', 'O'), ('in', 'O'), ('weekly', 'O'), ('export', 'O'), ('commitments', 'O'), ('for', 'O'), ('the', 'O'), ('week', 'O'), ('ended', 'O'), ('August', 'O'), ('22', 'O'), (',', 'O'), ('includes', 'O'), ('old', 'O'), ('crop', 'O')]</td>
+      <td>[('15', 'O'), ('-', 'O'), ('Christian', 'B-PER'), ('Cullen', 'I-PER'), (',', 'O'), ('14', 'O'), ('-', 'O'), ('Jeff', 'B-PER'), ('Wilson', 'I-PER'), (',', 'O'), ('13', 'O'), ('-', 'O'), ('Walter', 'B-PER'), ('Little', 'I-PER'), (',', 'O'), ('12', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('Bunce', 'I-PER'), (',', 'O')]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('In', 'O'), ('New', 'B-LOC'), ('York', 'I-LOC'), (',', 'O'), ('Wally', 'B-PER'), ('Whitehurst', 'I-PER'), ('allowed', 'O'), ('two', 'O'), ('runs', 'O'), ('over', 'O'), ('seven', 'O'), ('innings', 'O'), ('for', 'O'), ('his', 'O'), ('first', 'O'), ('win', 'O'), ('in', 'O'), ('more', 'O'), ('than', 'O'), ('two', 'O')]</td>
+      <td>[('In', 'O'), ('his', 'O'), ('opinion', 'O'), ('the', 'O'), ('quartering', 'O'), ('of', 'O'), ('Unita', 'B-ORG'), ('forces', 'O'), ('must', 'O'), ('be', 'O'), ('concluded', 'O'), ('in', 'O'), ('all', 'O'), ('the', 'O'), ('Angolan', 'B-MISC'), ('territory', 'O'), ('and', 'O'), ('the', 'O'), ('troops', 'O'), ('must', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('In', 'O'), ('Boston', 'B-LOC'), (',', 'O'), ('Troy', 'B-PER'), ("O'Leary", 'I-PER'), ('homered', 'O'), ('off', 'O'), ('the', 'O'), ('right-field', 'O'), ('foul', 'O'), ('pole', 'O'), ('with', 'O'), ('one', 'O'), ('out', 'O'), ('in', 'O'), ('the', 'O'), ('bottom', 'O'), ('of', 'O'), ('the', 'O'), ('ninth', 'O')]</td>
+      <td>[('The', 'O'), ('tournament', 'O'), ('also', 'O'), ('lost', 'O'), ('its', 'O'), ('second', 'O'), ('seed', 'O'), ('on', 'O'), ('the', 'O'), ('third', 'O'), ('day', 'O'), ('of', 'O'), ('play', 'O'), ('when', 'O'), ('second-seeded', 'O'), ('Goran', 'B-PER'), ('Ivanisevic', 'I-PER'), ('of', 'O'), ('Croatia', 'B-LOC'), ('was', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('The', 'O'), ('mayor', 'O'), ('of', 'O'), ('Acatepec', 'B-LOC'), (',', 'O'), ('a', 'O'), ('small', 'O'), ('town', 'O'), ('some', 'O'), ('310', 'O'), ('miles', 'O'), ('(', 'O'), ('500', 'O'), ('km', 'O'), (')', 'O'), ('south', 'O'), ('of', 'O'), ('Mexico', 'B-LOC'), ('City', 'I-LOC'), (',', 'O')]</td>
+      <td>[('In', 'O'), ('Kansas', 'B-LOC'), ('City', 'I-LOC'), (',', 'O'), ('Juan', 'B-PER'), ('Guzman', 'I-PER'), ('tossed', 'O'), ('a', 'O'), ('complete-game', 'O'), ('six-hitter', 'O'), ('to', 'O'), ('win', 'O'), ('for', 'O'), ('the', 'O'), ('first', 'O'), ('time', 'O'), ('in', 'O'), ('over', 'O'), ('a', 'O'), ('month', 'O')]</td>
     </tr>
   </tbody>
 </table>
