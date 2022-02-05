@@ -726,7 +726,6 @@ equavlient of fast tokenizer's `word_ids`</p></li>
     <span class="n">id_attr</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">word_list_attr</span><span class="o">=</span><span class="s2">&quot;tokens&quot;</span><span class="p">,</span>
     <span class="n">label_list_attr</span><span class="o">=</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">,</span>
-    <span class="n">labeling_strategy_cls</span><span class="o">=</span><span class="n">OnlyFirstTokenLabelingStrategy</span><span class="p">,</span>
     <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">conll2003_df</span><span class="p">)</span>
@@ -774,32 +773,35 @@ equavlient of fast tokenizer's `word_ids`</p></li>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>input_ids</th>
-      <th>attention_mask</th>
-      <th>aligned_labels</th>
-      <th>tokens</th>
-      <th>ner_tags</th>
+      <th>proc_tokens</th>
+      <th>proc_ner_tags</th>
+      <th>chunk_tags</th>
       <th>id</th>
+      <th>ner_tags</th>
+      <th>pos_tags</th>
+      <th>tokens</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[0, 1281, 24020, 1859, 486, 7, 13978, 2]</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1]</td>
-      <td>[-100, 3, 0, 7, 0, 0, 0, -100]</td>
-      <td>[EU, rejects, German, call, to, boycott, British, lamb, .]</td>
-      <td>[3, 0, 7, 0, 0, 0, 7, 0, 0]</td>
+      <td>[EU, rejects, German, call, to, boycott]</td>
+      <td>[3, 0, 7, 0, 0, 0]</td>
+      <td>[11, 21, 11, 12, 21, 22, 11, 12, 0]</td>
       <td>0</td>
+      <td>[3, 0, 7, 0, 0, 0, 7, 0, 0]</td>
+      <td>[22, 42, 16, 21, 35, 37, 16, 21, 7]</td>
+      <td>[EU, rejects, German, call, to, boycott, British, lamb, .]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[0, 2155, 20809, 2]</td>
-      <td>[1, 1, 1, 1]</td>
-      <td>[-100, 1, 2, -100]</td>
       <td>[Peter, Blackburn]</td>
       <td>[1, 2]</td>
+      <td>[11, 12]</td>
       <td>1</td>
+      <td>[1, 2]</td>
+      <td>[22, 22]</td>
+      <td>[Peter, Blackburn]</td>
     </tr>
   </tbody>
 </table>
@@ -908,13 +910,10 @@ equavlient of fast tokenizer's `word_ids`</p></li>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">TokenClassificationPreprocessor</span><span class="p">(</span>
     <span class="n">hf_tokenizer</span><span class="p">,</span>
-    <span class="n">chunk_examples</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">word_stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">label_names</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
     <span class="n">id_attr</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">word_list_attr</span><span class="o">=</span><span class="s2">&quot;tokens&quot;</span><span class="p">,</span>
     <span class="n">label_list_attr</span><span class="o">=</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">,</span>
-    <span class="n">labeling_strategy_cls</span><span class="o">=</span><span class="n">OnlyFirstTokenLabelingStrategy</span><span class="p">,</span>
     <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>
 <span class="p">)</span>
 
@@ -935,7 +934,7 @@ equavlient of fast tokenizer's `word_ids`</p></li>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>61298
+<pre>14041
 [&#39;O&#39;, &#39;B-PER&#39;, &#39;I-PER&#39;, &#39;B-ORG&#39;, &#39;I-ORG&#39;, &#39;B-LOC&#39;, &#39;I-LOC&#39;, &#39;B-MISC&#39;, &#39;I-MISC&#39;]
 </pre>
 </div>
@@ -963,32 +962,35 @@ equavlient of fast tokenizer's `word_ids`</p></li>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>input_ids</th>
-      <th>attention_mask</th>
-      <th>aligned_labels</th>
-      <th>tokens</th>
-      <th>ner_tags</th>
+      <th>proc_tokens</th>
+      <th>proc_ner_tags</th>
+      <th>chunk_tags</th>
       <th>id</th>
+      <th>ner_tags</th>
+      <th>pos_tags</th>
+      <th>tokens</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[0, 1281, 24020, 1859, 486, 7, 13978, 2]</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1]</td>
-      <td>[-100, 3, 0, 7, 0, 0, 0, -100]</td>
       <td>[EU, rejects, German, call, to, boycott]</td>
       <td>[B-ORG, O, B-MISC, O, O, O]</td>
+      <td>[11, 21, 11, 12, 21, 22, 11, 12, 0]</td>
       <td>0</td>
+      <td>[B-ORG, O, B-MISC, O, O, O, B-MISC, O, O]</td>
+      <td>[22, 42, 16, 21, 35, 37, 16, 21, 7]</td>
+      <td>[EU, rejects, German, call, to, boycott, British, lamb, .]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[0, 7, 13978, 1089, 17988, 479, 2]</td>
-      <td>[1, 1, 1, 1, 1, 1, 1]</td>
-      <td>[-100, 0, 0, 7, 0, 0, -100]</td>
-      <td>[to, boycott, British, lamb, .]</td>
-      <td>[O, O, B-MISC, O, O]</td>
-      <td>0</td>
+      <td>[Peter, Blackburn]</td>
+      <td>[B-PER, I-PER]</td>
+      <td>[11, 12]</td>
+      <td>1</td>
+      <td>[B-PER, I-PER]</td>
+      <td>[22, 22]</td>
+      <td>[Peter, Blackburn]</td>
     </tr>
   </tbody>
 </table>
@@ -1032,7 +1034,7 @@ equavlient of fast tokenizer's `word_ids`</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TokenTensorCategory" class="doc_header"><code>class</code> <code>TokenTensorCategory</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L372" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenTensorCategory</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorBase</code></p>
+<h2 id="TokenTensorCategory" class="doc_header"><code>class</code> <code>TokenTensorCategory</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L362" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenTensorCategory</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <code>TensorBase</code></p>
 </blockquote>
 <p>A <code>Tensor</code> which support subclass pickling, and maintains metadata when casting or after methods</p>
 
@@ -1072,7 +1074,7 @@ equavlient of fast tokenizer's `word_ids`</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TokenCategorize" class="doc_header"><code>class</code> <code>TokenCategorize</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L377" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenCategorize</code>(<strong><code>vocab</code></strong>:<code>List</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>) :: <code>Transform</code></p>
+<h2 id="TokenCategorize" class="doc_header"><code>class</code> <code>TokenCategorize</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L367" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenCategorize</code>(<strong><code>vocab</code></strong>:<code>List</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>) :: <code>Transform</code></p>
 </blockquote>
 <p>Reversible transform of a list of category string to <code>vocab</code> id</p>
 <p><strong>Parameters:</strong></p>
@@ -1127,7 +1129,7 @@ equavlient of fast tokenizer's `word_ids`</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="TokenCategoryBlock" class="doc_header"><code>TokenCategoryBlock</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L410" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TokenCategoryBlock</code>(<strong><code>vocab</code></strong>:<code>Optional</code>[<code>List</code>[<code>str</code>]]=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>)</p>
+<h4 id="TokenCategoryBlock" class="doc_header"><code>TokenCategoryBlock</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L400" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TokenCategoryBlock</code>(<strong><code>vocab</code></strong>:<code>Optional</code>[<code>List</code>[<code>str</code>]]=<em><code>None</code></em>, <strong><code>ignore_token</code></strong>:<code>str</code>=<em><code>'[xIGNx]'</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>)</p>
 </blockquote>
 <p><code>TransformBlock</code> for per-token categorical targets</p>
 <p><strong>Parameters:</strong></p>
@@ -1175,7 +1177,7 @@ equavlient of fast tokenizer's `word_ids`</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TokenClassTextInput" class="doc_header"><code>class</code> <code>TokenClassTextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L423" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenClassTextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
+<h2 id="TokenClassTextInput" class="doc_header"><code>class</code> <code>TokenClassTextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L413" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenClassTextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -1215,7 +1217,7 @@ equavlient of fast tokenizer's `word_ids`</p></li>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="TokenClassBatchTokenizeTransform" class="doc_header"><code>class</code> <code>TokenClassBatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L428" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenClassBatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>, <strong><code>labeling_strategy_cls</code></strong>:<a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a>=<em><code>OnlyFirstTokenLabelingStrategy</code></em>, <strong><code>max_length</code></strong>:<code>Optional</code>[<code>int</code>]=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>slow_word_ids_func</code></strong>:<code>Optional</code>[<code>Callable</code>]=<em><code>None</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
+<h2 id="TokenClassBatchTokenizeTransform" class="doc_header"><code>class</code> <code>TokenClassBatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/token_classification.py#L418" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>TokenClassBatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>ignore_token_id</code></strong>:<code>int</code>=<em><code>-100</code></em>, <strong><code>labeling_strategy_cls</code></strong>:<a href="/blurr/data-token-classification.html#BaseLabelingStrategy"><code>BaseLabelingStrategy</code></a>=<em><code>OnlyFirstTokenLabelingStrategy</code></em>, <strong><code>max_length</code></strong>:<code>Optional</code>[<code>int</code>]=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>slow_word_ids_func</code></strong>:<code>Optional</code>[<code>Callable</code>]=<em><code>None</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -1231,9 +1233,6 @@ decode the dictionary produced as a byproduct of the tokenization process in the
 </ul>
 <ul>
 <li><strong><code>hf_model</code></strong> : <em><code>&lt;class 'transformers.modeling_utils.PreTrainedModel'&gt;</code></em>   <p>A Hugging Face model</p></li>
-</ul>
-<ul>
-<li><strong><code>is_pretokenized</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>If you are passing in the "input_ids" as your inputs, set `is_pretokenized` = True</p></li>
 </ul>
 <ul>
 <li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss</p></li>
@@ -1374,11 +1373,6 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span><span class="n">TextBlock</span><span class="p">(</span><span class="n">batch_tokenize_tfm</span><span class="o">=</span><span class="n">batch_tok_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">TokenClassTextInput</span><span class="p">),</span> <span class="n">TokenCategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">labels</span><span class="p">))</span>
 
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span><span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span> <span class="n">get_x</span><span class="o">=</span><span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;tokens&quot;</span><span class="p">),</span> <span class="n">get_y</span><span class="o">=</span><span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">),</span> <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">())</span>
-
-<span class="c1"># def get_x(item):</span>
-<span class="c1">#     return {&quot;id&quot;: item.id, &quot;text&quot;: item.tokens}</span>
-
-<span class="c1"># dblock = DataBlock(blocks=blocks, get_x=get_x, get_y=ColReader(&quot;ner_tags&quot;), splitter=RandomSplitter())</span>
 </pre></div>
 
     </div>
@@ -1503,15 +1497,15 @@ equavlient of fast tokenizer's `word_ids``</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('15', 'O'), ('-', 'O'), ('Christian', 'B-PER'), ('Cullen', 'I-PER'), (',', 'O'), ('14', 'O'), ('-', 'O'), ('Jeff', 'B-PER'), ('Wilson', 'I-PER'), (',', 'O'), ('13', 'O'), ('-', 'O'), ('Walter', 'B-PER'), ('Little', 'I-PER'), (',', 'O'), ('12', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('Bunce', 'I-PER'), (',', 'O')]</td>
+      <td>[('Prime', 'O'), ('Minister', 'O'), ('Benjamin', 'B-PER'), ('Netanyahu', 'I-PER'), ("'s", 'O'), ('government', 'O'), (',', 'O'), ('which', 'O'), ('took', 'O'), ('office', 'O'), ('in', 'O'), ('June', 'O'), (',', 'O'), ('has', 'O'), ('said', 'O'), ('it', 'O'), ('will', 'O'), ('not', 'O'), ('allow', 'O'), ('the', 'O')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('McCurry', 'B-PER'), ('said', 'O'), ('that', 'O'), ('when', 'O'), ('Clinton', 'B-PER'), ('delivers', 'O'), ('his', 'O'), ('acceptance', 'O'), ('address', 'O'), ('on', 'O'), ('Thursday', 'O'), ('night', 'O'), ('to', 'O'), ('fellow', 'O'), ('Democrats', 'B-MISC'), ('and', 'O'), ('a', 'O'), ('national', 'O'), ('television', 'O'), ('audience', 'O')]</td>
+      <td>[('Basuki', 'B-PER'), (',', 'O'), ('a', 'O'), ('first-round', 'O'), ('loser', 'O'), ('here', 'O'), ('for', 'O'), ('the', 'O'), ('fifth', 'O'), ('consecutive', 'O'), ('year', 'O'), (',', 'O'), ('was', 'O'), ('clearly', 'O'), ('going', 'O'), ('for', 'O'), ('winners', 'O'), (',', 'O'), ('hitting', 'O'), ('the', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('Showers', 'O'), ('and', 'O'), ('rain', 'O'), ('0.25-1.00', 'O'), ('inch', 'O'), ('(', 'O'), ('6-25', 'O'), ('mm', 'O'), (')', 'O'), ('and', 'O'), ('locally', 'O'), ('heavier', 'O'), ('through', 'O'), ('most', 'O'), ('of', 'O'), ('central', 'O'), ('and', 'O'), ('south', 'O'), ('central', 'O'), ('India', 'B-LOC')]</td>
+      <td>[('A', 'O'), ('freed', 'O'), ('black', 'O'), ('man', 'O'), ('writes', 'O'), ('to', 'O'), ('his', 'O'), ('still-enslaved', 'O'), ('wife', 'O'), (',', 'O'), ('a', 'O'), ('mother', 'O'), ('pleads', 'O'), ('with', 'O'), ('Abraham', 'B-PER'), ('Lincoln', 'I-PER'), ('on', 'O'), ('behalf', 'O'), ('of', 'O'), ('her', 'O')]</td>
     </tr>
   </tbody>
 </table>
@@ -1527,8 +1521,7 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Pre-tokenized">Pre-tokenized<a class="anchor-link" href="#Pre-tokenized"> </a></h4><p>If special tokens are included in your pre-processed inputs (as is the case when using Blurr's <a href="/blurr/data-token-classification.html#TokenClassificationPreprocessor"><code>TokenClassificationPreprocessor</code></a>), make sure you tell the <a href="/blurr/data-token-classification.html#TokenClassBatchTokenizeTransform"><code>TokenClassBatchTokenizeTransform</code></a> to <strong><em>not</em></strong> include them (as they are already there).</p>
-
+<h4 id="Passing-extra-infromation">Passing extra infromation<a class="anchor-link" href="#Passing-extra-infromation"> </a></h4>
 </div>
 </div>
 </div>
@@ -1596,13 +1589,10 @@ equavlient of fast tokenizer's `word_ids``</p></li>
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">TokenClassificationPreprocessor</span><span class="p">(</span>
     <span class="n">hf_tokenizer</span><span class="p">,</span>
-    <span class="n">chunk_examples</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">word_stride</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
     <span class="n">label_names</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
     <span class="n">id_attr</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">word_list_attr</span><span class="o">=</span><span class="s2">&quot;tokens&quot;</span><span class="p">,</span>
     <span class="n">label_list_attr</span><span class="o">=</span><span class="s2">&quot;ner_tags&quot;</span><span class="p">,</span>
-    <span class="n">labeling_strategy_cls</span><span class="o">=</span><span class="n">OnlyFirstTokenLabelingStrategy</span><span class="p">,</span>
     <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="mi">128</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">conll2003_df</span><span class="p">)</span>
@@ -1638,32 +1628,35 @@ equavlient of fast tokenizer's `word_ids``</p></li>
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>input_ids</th>
-      <th>attention_mask</th>
-      <th>aligned_labels</th>
-      <th>tokens</th>
-      <th>ner_tags</th>
+      <th>proc_tokens</th>
+      <th>proc_ner_tags</th>
+      <th>chunk_tags</th>
       <th>id</th>
+      <th>ner_tags</th>
+      <th>pos_tags</th>
+      <th>tokens</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[0, 1281, 24020, 1859, 486, 7, 13978, 1089, 17988, 479, 2]</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]</td>
-      <td>[-100, 3, 0, 7, 0, 0, 0, 7, 0, 0, -100]</td>
       <td>[EU, rejects, German, call, to, boycott, British, lamb, .]</td>
       <td>[3, 0, 7, 0, 0, 0, 7, 0, 0]</td>
+      <td>[11, 21, 11, 12, 21, 22, 11, 12, 0]</td>
       <td>0</td>
+      <td>[3, 0, 7, 0, 0, 0, 7, 0, 0]</td>
+      <td>[22, 42, 16, 21, 35, 37, 16, 21, 7]</td>
+      <td>[EU, rejects, German, call, to, boycott, British, lamb, .]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[0, 2155, 20809, 2]</td>
-      <td>[1, 1, 1, 1]</td>
-      <td>[-100, 1, 2, -100]</td>
       <td>[Peter, Blackburn]</td>
       <td>[1, 2]</td>
+      <td>[11, 12]</td>
       <td>1</td>
+      <td>[1, 2]</td>
+      <td>[22, 22]</td>
+      <td>[Peter, Blackburn]</td>
     </tr>
   </tbody>
 </table>
@@ -1691,17 +1684,13 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_tok_tfm</span> <span class="o">=</span> <span class="n">TokenClassBatchTokenizeTransform</span><span class="p">(</span>
-    <span class="n">hf_arch</span><span class="p">,</span>
-    <span class="n">hf_config</span><span class="p">,</span>
-    <span class="n">hf_tokenizer</span><span class="p">,</span>
-    <span class="n">hf_model</span><span class="p">,</span>
-    <span class="n">is_pretokenized</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span> <span class="s2">&quot;add_special_tokens&quot;</span><span class="p">:</span> <span class="kc">False</span> <span class="p">}</span>
-<span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">batch_tok_tfm</span> <span class="o">=</span> <span class="n">TokenClassBatchTokenizeTransform</span><span class="p">(</span><span class="n">hf_arch</span><span class="p">,</span> <span class="n">hf_config</span><span class="p">,</span> <span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">hf_model</span><span class="p">)</span>
 <span class="n">blocks</span> <span class="o">=</span> <span class="p">(</span><span class="n">TextBlock</span><span class="p">(</span><span class="n">batch_tokenize_tfm</span><span class="o">=</span><span class="n">batch_tok_tfm</span><span class="p">,</span> <span class="n">input_return_type</span><span class="o">=</span><span class="n">TokenClassTextInput</span><span class="p">),</span> <span class="n">TokenCategoryBlock</span><span class="p">(</span><span class="n">vocab</span><span class="o">=</span><span class="n">labels</span><span class="p">))</span>
 
-<span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span><span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span> <span class="n">get_x</span><span class="o">=</span><span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;input_ids&quot;</span><span class="p">),</span> <span class="n">get_y</span><span class="o">=</span><span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;aligned_labels&quot;</span><span class="p">),</span> <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">())</span>
+<span class="k">def</span> <span class="nf">get_x</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">proc_tokens</span><span class="p">}</span>
+
+<span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span><span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span> <span class="n">get_x</span><span class="o">=</span><span class="n">get_x</span><span class="p">,</span> <span class="n">get_y</span><span class="o">=</span><span class="n">ColReader</span><span class="p">(</span><span class="s2">&quot;proc_ner_tags&quot;</span><span class="p">),</span> <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">())</span>
 </pre></div>
 
     </div>
@@ -1773,7 +1762,7 @@ equavlient of fast tokenizer's `word_ids``</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(2, torch.Size([4, 88]), torch.Size([4, 88]))</pre>
+<pre>(2, torch.Size([4, 130]), torch.Size([4, 130]))</pre>
 </div>
 
 </div>
@@ -1815,19 +1804,19 @@ equavlient of fast tokenizer's `word_ids``</p></li>
   <tbody>
     <tr>
       <th>0</th>
-      <td>[('15', 'O'), ('-', 'O'), ('Christian', 'B-PER'), ('Cullen', 'I-PER'), (',', 'O'), ('14', 'O'), ('-', 'O'), ('Jeff', 'B-PER'), ('Wilson', 'I-PER'), (',', 'O'), ('13', 'O'), ('-', 'O'), ('Walter', 'B-PER'), ('Little', 'I-PER'), (',', 'O'), ('12', 'O'), ('-', 'O'), ('Frank', 'B-PER'), ('Bunce', 'I-PER'), (',', 'O')]</td>
+      <td>[('MARKET', 'O'), ('TALK', 'O'), ('-', 'O'), ('USDA', 'B-ORG'), ('net', 'O'), ('change', 'O'), ('in', 'O'), ('weekly', 'O'), ('export', 'O'), ('commitments', 'O'), ('for', 'O'), ('the', 'O'), ('week', 'O'), ('ended', 'O'), ('August', 'O'), ('22', 'O'), (',', 'O'), ('includes', 'O'), ('old', 'O'), ('crop', 'O')]</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[('In', 'O'), ('his', 'O'), ('opinion', 'O'), ('the', 'O'), ('quartering', 'O'), ('of', 'O'), ('Unita', 'B-ORG'), ('forces', 'O'), ('must', 'O'), ('be', 'O'), ('concluded', 'O'), ('in', 'O'), ('all', 'O'), ('the', 'O'), ('Angolan', 'B-MISC'), ('territory', 'O'), ('and', 'O'), ('the', 'O'), ('troops', 'O'), ('must', 'O')]</td>
+      <td>[('Japan', 'B-LOC'), ("'s", 'O'), ('Finance', 'O'), ('Minister', 'O'), ('Wataru', 'B-PER'), ('Kubo', 'I-PER'), ('told', 'O'), ('a', 'O'), ('news', 'O'), ('conference', 'O'), ('on', 'O'), ('Wednesday', 'O'), ('that', 'O'), ('he', 'O'), ('believes', 'O'), ('that', 'O'), ('the', 'O'), ('Bank', 'B-ORG'), ('of', 'I-ORG'), ('Japan', 'I-ORG')]</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[('The', 'O'), ('tournament', 'O'), ('also', 'O'), ('lost', 'O'), ('its', 'O'), ('second', 'O'), ('seed', 'O'), ('on', 'O'), ('the', 'O'), ('third', 'O'), ('day', 'O'), ('of', 'O'), ('play', 'O'), ('when', 'O'), ('second-seeded', 'O'), ('Goran', 'B-PER'), ('Ivanisevic', 'I-PER'), ('of', 'O'), ('Croatia', 'B-LOC'), ('was', 'O')]</td>
+      <td>[('"', 'O'), ('Although', 'O'), (',', 'O'), ('if', 'O'), ('we', 'O'), ('did', 'O'), ('get', 'O'), ('someone', 'O'), ('that', 'O'), ('was', 'O'), ('seen', 'O'), ('as', 'O'), ('looking', 'O'), ('for', 'O'), ('a', 'O'), ('dollar', 'O'), ('depreciation', 'O'), (',', 'O'), ('it', 'O'), ('would', 'O')]</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[('In', 'O'), ('Kansas', 'B-LOC'), ('City', 'I-LOC'), (',', 'O'), ('Juan', 'B-PER'), ('Guzman', 'I-PER'), ('tossed', 'O'), ('a', 'O'), ('complete-game', 'O'), ('six-hitter', 'O'), ('to', 'O'), ('win', 'O'), ('for', 'O'), ('the', 'O'), ('first', 'O'), ('time', 'O'), ('in', 'O'), ('over', 'O'), ('a', 'O'), ('month', 'O')]</td>
+      <td>[('The', 'O'), ('Brady', 'B-PER'), ('bill', 'O'), (',', 'O'), ('calling', 'O'), ('for', 'O'), ('a', 'O'), ('waiting', 'O'), ('period', 'O'), ('before', 'O'), ('someone', 'O'), ('could', 'O'), ('buy', 'O'), ('a', 'O'), ('gun', 'O'), ('so', 'O'), ('a', 'O'), ('background', 'O'), ('check', 'O'), ('could', 'O')]</td>
     </tr>
   </tbody>
 </table>

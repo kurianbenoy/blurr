@@ -250,13 +250,19 @@ transformers: 4.16.2
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="find_answer_token_idxs" class="doc_header"><code>find_answer_token_idxs</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L26" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_answer_token_idxs</code>(<strong><code>start_char_idx</code></strong>, <strong><code>end_char_idx</code></strong>, <strong><code>offset_mapping</code></strong>, <strong><code>qst_mask</code></strong>)</p>
+<h4 id="find_answer_token_idxs" class="doc_header"><code>find_answer_token_idxs</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L26" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>find_answer_token_idxs</code>(<strong><code>hf_tokenizer</code></strong>, <strong><code>ans_text</code></strong>, <strong><code>start_char_idx</code></strong>, <strong><code>end_char_idx</code></strong>, <strong><code>input_ids</code></strong>, <strong><code>offset_mapping</code></strong>, <strong><code>qst_mask</code></strong>)</p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
+<li><p><strong><code>hf_tokenizer</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>ans_text</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
 <li><p><strong><code>start_char_idx</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
 </li>
 <li><p><strong><code>end_char_idx</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
+</li>
+<li><p><strong><code>input_ids</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
 </li>
 <li><p><strong><code>offset_mapping</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></p>
 </li>
@@ -294,7 +300,7 @@ transformers: 4.16.2
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QuestionAnsweringPreprocessor" class="doc_header"><code>class</code> <code>QuestionAnsweringPreprocessor</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L52" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QuestionAnsweringPreprocessor</code>(<strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>batch_size</code></strong>:<code>int</code>=<em><code>1000</code></em>, <strong><code>id_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>, <strong><code>ans_start_char_idx</code></strong>:<code>str</code>=<em><code>'ans_start_char_idx'</code></em>, <strong><code>ans_end_char_idx</code></strong>:<code>str</code>=<em><code>'ans_end_char_idx'</code></em>, <strong><code>is_valid_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>'is_valid'</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'return_overflowing_tokens': True}</code></em>) :: <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a></p>
+<h2 id="QuestionAnsweringPreprocessor" class="doc_header"><code>class</code> <code>QuestionAnsweringPreprocessor</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L63" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QuestionAnsweringPreprocessor</code>(<strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>batch_size</code></strong>:<code>int</code>=<em><code>1000</code></em>, <strong><code>id_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>None</code></em>, <strong><code>ctx_attr</code></strong>:<code>str</code>=<em><code>'context'</code></em>, <strong><code>qst_attr</code></strong>:<code>str</code>=<em><code>'question'</code></em>, <strong><code>ans_attr</code></strong>:<code>str</code>=<em><code>'answer_text'</code></em>, <strong><code>ans_start_char_idx</code></strong>:<code>str</code>=<em><code>'ans_start_char_idx'</code></em>, <strong><code>ans_end_char_idx</code></strong>:<code>str</code>=<em><code>'ans_end_char_idx'</code></em>, <strong><code>is_valid_attr</code></strong>:<code>Optional</code>[<code>str</code>]=<em><code>'is_valid'</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'return_overflowing_tokens': True}</code></em>) :: <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a></p>
 </blockquote>
 <p><strong>Parameters:</strong></p>
 <ul>
@@ -518,12 +524,11 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <th>ans_start_char_idx</th>
       <th>answer_text</th>
       <th>ans_end_char_idx</th>
+      <th>proc_question</th>
+      <th>proc_context</th>
       <th>ans_start_token_idx</th>
       <th>ans_end_token_idx</th>
-      <th>input_ids</th>
-      <th>attention_mask</th>
-      <th>offset_mapping</th>
-      <th>overflow_to_sample_mapping</th>
+      <th>is_answerable</th>
     </tr>
   </thead>
   <tbody>
@@ -536,13 +541,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
       <td>269</td>
       <td>in the late 1990s</td>
-      <td>287</td>
+      <td>286</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>84</td>
       <td>89</td>
-      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1634...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
-      <td>0</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>0</th>
@@ -553,13 +557,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
       <td>269</td>
       <td>in the late 1990s</td>
-      <td>287</td>
+      <td>286</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>in Houston, Texas, she performed in various singing and dancing competitions as a child, and ro...</td>
       <td>32</td>
       <td>37</td>
-      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 11, 2499, 6, 1184, 6, 79, 3744, 11, 1337,...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
-      <td>0</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>0</th>
@@ -570,13 +573,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
       <td>269</td>
       <td>in the late 1990s</td>
-      <td>287</td>
+      <td>286</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>group became one of the world's best-selling girl groups of all time. Their hiatus saw the rele...</td>
       <td>0</td>
       <td>0</td>
-      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 333, 1059, 65, 9, 5, 232, 18, 275, 12, 11...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
-      <td>0</td>
+      <td>False</td>
     </tr>
     <tr>
       <th>1</th>
@@ -587,13 +589,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
       <td>207</td>
       <td>singing and dancing</td>
-      <td>227</td>
+      <td>226</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>77</td>
       <td>80</td>
-      <td>[0, 653, 911, 222, 12674, 1755, 3511, 11, 77, 79, 21, 1197, 62, 116, 2, 2, 12674, 12695, 272, 35...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 10], [11, 14], [15, 20], [20, 22], [23, 30], [31, 33], [34, 38], [39, 42], ...</td>
-      <td>0</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>1</th>
@@ -604,13 +605,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
       <td>207</td>
       <td>singing and dancing</td>
-      <td>227</td>
+      <td>226</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>actress. Born and raised in Houston, Texas, she performed in various singing and dancing compet...</td>
       <td>30</td>
       <td>33</td>
-      <td>[0, 653, 911, 222, 12674, 1755, 3511, 11, 77, 79, 21, 1197, 62, 116, 2, 2, 3390, 4, 8912, 8, 117...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 10], [11, 14], [15, 20], [20, 22], [23, 30], [31, 33], [34, 38], [39, 42], ...</td>
-      <td>0</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -632,14 +632,121 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proc_df</span><span class="p">[</span><span class="n">proc_df</span><span class="o">.</span><span class="n">proc_question</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;What is Chopin&quot;</span><span class="p">)]</span><span class="o">.</span><span class="n">proc_context</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>843    Fryderyk&#39;s father, Nicolas Chopin, was a Frenchman from Lorraine who had emigrated to Poland in ...
+843    żanowska, a poor relative of the Skarbeks, one of the families for whom he worked. Fryderyk was ...
+843    chów. His eighteen-year-old godfather, for whom he was named, was Fryderyk Skarbek, a pupil of N...
+Name: proc_context, dtype: object</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test_eq</span><span class="p">(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proc_question&quot;</span><span class="p">],</span> <span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;question&quot;</span><span class="p">])</span>
+<span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proc_context&quot;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#34;Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an American singer, songwriter, record producer and actress. Born and raised in Houston, Texas, she performed in various singing and dancing competitions as a child, and rose to fame in the late 1990s as lead singer of R&amp;B girl-group Destiny&#39;s Child. Managed by her father, Mathew Knowles, the group became one of the world&#39;s best-selling girl groups&#34;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proc_question&quot;</span><span class="p">],</span> <span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proc_context&quot;</span><span class="p">])</span>
+<span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">proc_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;in the late 1990s&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">sampled_df</span> <span class="o">=</span> <span class="n">proc_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sampled_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="n">test_example</span> <span class="o">=</span> <span class="n">row</span>
 
-    <span class="k">if</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">hf_tokenizer</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">proc_question</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">proc_context</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">test_example</span><span class="o">.</span><span class="n">is_answerable</span><span class="p">:</span>
+        <span class="c1"># print(test_example.answer_text)</span>
         <span class="n">test_eq</span><span class="p">(</span>
             <span class="n">test_example</span><span class="o">.</span><span class="n">answer_text</span><span class="p">,</span>
-            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">test_example</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="n">hf_tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">][</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="p">:</span> <span class="n">test_example</span><span class="o">.</span><span class="n">ans_end_token_idx</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">test_eq</span><span class="p">(</span><span class="n">test_example</span><span class="o">.</span><span class="n">ans_start_token_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -669,7 +776,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">QuestionAnsweringPreprocessor</span><span class="p">(</span><span class="n">hf_tokenizer</span><span class="p">,</span> <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">})</span>
 <span class="n">proc2_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
-<span class="n">proc2_df</span> <span class="o">=</span> <span class="n">proc2_df</span><span class="p">[(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">ans_start_token_idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
+<span class="n">proc2_df</span> <span class="o">=</span> <span class="n">proc2_df</span><span class="p">[(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">ans_end_token_idx</span> <span class="o">&lt;</span> <span class="n">max_seq_len</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">proc2_df</span><span class="o">.</span><span class="n">is_answerable</span><span class="p">)]</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc2_df</span><span class="p">))</span>
 <span class="n">proc2_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -720,11 +827,11 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <th>ans_start_char_idx</th>
       <th>answer_text</th>
       <th>ans_end_char_idx</th>
+      <th>proc_question</th>
+      <th>proc_context</th>
       <th>ans_start_token_idx</th>
       <th>ans_end_token_idx</th>
-      <th>input_ids</th>
-      <th>attention_mask</th>
-      <th>offset_mapping</th>
+      <th>is_answerable</th>
     </tr>
   </thead>
   <tbody>
@@ -737,12 +844,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
       <td>269</td>
       <td>in the late 1990s</td>
-      <td>287</td>
+      <td>286</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>84</td>
       <td>89</td>
-      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1634...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>1</th>
@@ -753,12 +860,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
       <td>207</td>
       <td>singing and dancing</td>
-      <td>227</td>
+      <td>226</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>77</td>
       <td>80</td>
-      <td>[0, 653, 911, 222, 12674, 1755, 3511, 11, 77, 79, 21, 1197, 62, 116, 2, 2, 12674, 12695, 272, 35...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 10], [11, 14], [15, 20], [20, 22], [23, 30], [31, 33], [34, 38], [39, 42], ...</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>3</th>
@@ -769,12 +876,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['Houston, Texas'], 'answer_start': [166]}</td>
       <td>166</td>
       <td>Houston, Texas</td>
-      <td>181</td>
+      <td>180</td>
+      <td>In what city and state did Beyonce  grow up?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>69</td>
       <td>72</td>
-      <td>[0, 96, 99, 343, 8, 194, 222, 12674, 1755, 1437, 1733, 62, 116, 1437, 2, 2, 12674, 12695, 272, 3...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 2], [3, 7], [8, 12], [13, 16], [17, 22], [23, 26], [27, 32], [32, 34], [35, 35], [3...</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>4</th>
@@ -785,12 +892,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['late 1990s'], 'answer_start': [276]}</td>
       <td>276</td>
       <td>late 1990s</td>
-      <td>287</td>
+      <td>286</td>
+      <td>In which decade did Beyonce become famous?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>87</td>
       <td>90</td>
-      <td>[0, 96, 61, 2202, 222, 12674, 1755, 555, 3395, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 2], [3, 8], [9, 15], [16, 19], [20, 25], [25, 27], [28, 34], [35, 41], [41, 42], [0...</td>
+      <td>True</td>
     </tr>
     <tr>
       <th>5</th>
@@ -801,12 +908,12 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>{'text': ['Destiny's Child'], 'answer_start': [320]}</td>
       <td>320</td>
       <td>Destiny's Child</td>
-      <td>336</td>
+      <td>335</td>
+      <td>In what R&amp;B group was she the lead singer?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>103</td>
       <td>106</td>
-      <td>[0, 96, 99, 248, 947, 387, 333, 21, 79, 5, 483, 3250, 116, 2, 2, 12674, 12695, 272, 354, 6591, 1...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 2], [3, 7], [8, 9], [9, 10], [10, 11], [12, 17], [18, 21], [22, 25], [26, 29], [30,...</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -844,7 +951,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QuestionAnswerTextInput" class="doc_header"><code>class</code> <code>QuestionAnswerTextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L140" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QuestionAnswerTextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
+<h2 id="QuestionAnswerTextInput" class="doc_header"><code>class</code> <code>QuestionAnswerTextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L167" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QuestionAnswerTextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -882,7 +989,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QABatchTokenizeTransform" class="doc_header"><code>class</code> <code>QABatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L145" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QABatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>is_pretokenized</code></strong>:<code>bool</code>=<em><code>True</code></em>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{'add_special_tokens': False}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
+<h2 id="QABatchTokenizeTransform" class="doc_header"><code>class</code> <code>QABatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L172" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QABatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -898,10 +1005,6 @@ decode the dictionary produced as a byproduct of the tokenization process in the
 </ul>
 <ul>
 <li><strong><code>hf_model</code></strong> : <em><code>&lt;class 'transformers.modeling_utils.PreTrainedModel'&gt;</code></em>   <p>A Hugging Face model</p></li>
-</ul>
-<ul>
-<li><strong><code>is_pretokenized</code></strong> : <em><code>&lt;class 'bool'&gt;</code></em>, <em>optional</em>   <p>Contray to other NLP tasks where batch-time tokenization (`is_pretokenized` = False) is the default, with
-extractive question answering pre-processing is required, and as such we set it to True here</p></li>
 </ul>
 <ul>
 <li><strong><code>ignore_token_id</code></strong> : <em><code>&lt;class 'int'&gt;</code></em>, <em>optional</em>    <p>The token ID that should be ignored when calculating the loss</p></li>
@@ -927,9 +1030,7 @@ See [Everything you always wanted to know about padding and truncation](https://
 if your inputs are pre-tokenized (not numericalized)</p></li>
 </ul>
 <ul>
-<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs.
-Since extractive requires pre-tokenized input_ids, we default this to not include any "special" tokens as they are already
-included in the pre-processed input_ids</p></li>
+<li><strong><code>tok_kwargs</code></strong> : <em><code>&lt;class 'dict'&gt;</code></em>, <em>optional</em>    <p>Any other keyword arguments you want included when using your `hf_tokenizer` to tokenize your inputs.</p></li>
 </ul>
 <ul>
 <li><strong><code>kwargs</code></strong> : <em><code>&lt;class 'inspect._empty'&gt;</code></em></li>
@@ -1055,12 +1156,11 @@ included in the pre-processed input_ids</p></li>
       <th>ans_start_char_idx</th>
       <th>answer_text</th>
       <th>ans_end_char_idx</th>
+      <th>proc_question</th>
+      <th>proc_context</th>
       <th>ans_start_token_idx</th>
       <th>ans_end_token_idx</th>
-      <th>input_ids</th>
-      <th>attention_mask</th>
-      <th>offset_mapping</th>
-      <th>overflow_to_sample_mapping</th>
+      <th>is_answerable</th>
     </tr>
   </thead>
   <tbody>
@@ -1073,13 +1173,12 @@ included in the pre-processed input_ids</p></li>
       <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
       <td>269</td>
       <td>in the late 1990s</td>
-      <td>287</td>
+      <td>286</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
       <td>84</td>
       <td>89</td>
-      <td>[0, 520, 222, 12674, 1755, 386, 1959, 1406, 116, 2, 2, 12674, 12695, 272, 354, 6591, 10690, 1634...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 8], [9, 14], [14, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, ...</td>
-      <td>0</td>
+      <td>True</td>
     </tr>
   </tbody>
 </table>
@@ -1117,7 +1216,7 @@ included in the pre-processed input_ids</p></li>
 
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
     <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
-    <span class="n">get_x</span><span class="o">=</span><span class="n">ColReader</span><span class="p">(</span><span class="s1">&#39;input_ids&#39;</span><span class="p">),</span>
+    <span class="n">get_x</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">proc_question</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">proc_context</span><span class="p">),</span>
     <span class="n">get_y</span><span class="o">=</span><span class="p">[</span><span class="n">ColReader</span><span class="p">(</span><span class="s1">&#39;ans_start_token_idx&#39;</span><span class="p">),</span> <span class="n">ColReader</span><span class="p">(</span><span class="s1">&#39;ans_end_token_idx&#39;</span><span class="p">)],</span>
     <span class="n">splitter</span><span class="o">=</span><span class="n">RandomSplitter</span><span class="p">(),</span>
     <span class="n">n_inp</span><span class="o">=</span><span class="mi">1</span>
@@ -1194,7 +1293,7 @@ included in the pre-processed input_ids</p></li>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(3, 3, 4, 4)</pre>
+<pre>(3, 6, 4, 4)</pre>
 </div>
 
 </div>
@@ -1216,22 +1315,6 @@ included in the pre-processed input_ids</p></li>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(torch.Size([4, 128]), torch.Size([4, 128]), torch.Size([4]), torch.Size([4]))</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1263,61 +1346,6 @@ included in the pre-processed input_ids</p></li>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>text</th>
-      <th>found</th>
-      <th>start/end</th>
-      <th>answer</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>If Beyonce won three Grammies in 2015, how many was she nominated for? early September and also the Global Citizen Festival later that month. Beyoncé made an uncredited featured appearance on the track "Hymn for the Weekend" by British rock band Coldplay, on their seventh studio album A Head Full of Dreams (2015), which saw release in December. On January 7, 2016, Pepsi announced Beyoncé would perform alongside Coldplay at Super Bowl 50 in February. Knowles has previously performed at four Super Bowl shows throughout her career, serving as the main headliner of the 47th Super Bowl halftime</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>What song did Beyoncé perform at the first inaugural dance for the Obamas. the Neighborhood Ball two days later. Beyoncé and Jay Z held a fundraiser at the latter's 40/40 Club in Manhattan for Obama's 2012 presidential campaign which raised $4 million. Beyoncé uploaded pictures of her paper ballot on Tumblr, confirming she had voted in support for the Democratic Party and to encourage others to do so. She also performed the American national anthem at his second inauguration, singing along with a pre-recorded track. She publicly endorsed same sex marriage on March 26, 2013, after the Supreme Court debate on California's Proposition</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>What establishments did Frédéric frequently visit in Paris that influenced his career? and often technically demanding; his own performances were noted for their nuance and sensitivity. Chopin invented the concept of instrumental ballade. His major piano works also include mazurkas, waltzes, nocturnes, polonaises, études, impromptus, scherzos, preludes and sonatas, some published only after his death. Influences on his compositional style include Polish folk music, the classical tradition of J. S. Bach, Mozart and Schubert, the</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Who did Beyoncé team up with in 2010 to get her fashions into Brazil?, a "high-style" mobile game with a social networking component, featuring the House of Deréon collection. In July 2009, Beyoncé and her mother launched a new junior apparel label, Sasha Fierce for Deréon, for back-to-school selling. The collection included sportswear, outerwear, handbags, footwear, eyewear, lingerie and jewelry. It was available at department stores including Macy's and Dillard's, and specialty stores Jimmy Jazz and Against All Odds. On</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1379,84 +1407,13 @@ included in the pre-processed input_ids</p></li>
     <span class="n">ans_attr</span><span class="o">=</span><span class="s2">&quot;answer_text&quot;</span><span class="p">,</span>
     <span class="n">ans_start_char_idx</span><span class="o">=</span><span class="s2">&quot;ans_start_char_idx&quot;</span><span class="p">,</span>
     <span class="n">ans_end_char_idx</span><span class="o">=</span><span class="s2">&quot;ans_end_char_idx&quot;</span><span class="p">,</span>
-    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="n">tok_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;return_overflowing_tokens&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;max_length&quot;</span><span class="p">:</span> <span class="n">max_seq_len</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">64</span><span class="p">},</span>
 <span class="p">)</span>
 <span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
 <span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>id</th>
-      <th>title</th>
-      <th>context</th>
-      <th>question</th>
-      <th>answers</th>
-      <th>ans_start_char_idx</th>
-      <th>answer_text</th>
-      <th>ans_end_char_idx</th>
-      <th>ans_start_token_idx</th>
-      <th>ans_end_token_idx</th>
-      <th>input_ids</th>
-      <th>token_type_ids</th>
-      <th>attention_mask</th>
-      <th>offset_mapping</th>
-      <th>overflow_to_sample_mapping</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>56be85543aeaaa14008c9063</td>
-      <td>Beyoncé</td>
-      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
-      <td>When did Beyonce start becoming popular?</td>
-      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
-      <td>269</td>
-      <td>in the late 1990s</td>
-      <td>287</td>
-      <td>75</td>
-      <td>79</td>
-      <td>[101, 2043, 2106, 20773, 2707, 3352, 2759, 1029, 102, 20773, 21025, 19358, 22815, 1011, 5708, 10...</td>
-      <td>[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...</td>
-      <td>[[0, 0], [0, 4], [5, 8], [9, 16], [17, 22], [23, 31], [32, 39], [39, 40], [0, 0], [0, 7], [8, 10...</td>
-      <td>0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1486,7 +1443,7 @@ included in the pre-processed input_ids</p></li>
 
 <span class="c1"># since its pre-tokenized, we include an &quot;input_ids&quot; key with the value being the preprocessed input_ids</span>
 <span class="k">def</span> <span class="nf">get_x</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;input_ids&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">input_ids</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">proc_question</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">proc_context</span><span class="p">),</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span><span class="p">}</span>
 
 
 <span class="n">dblock</span> <span class="o">=</span> <span class="n">DataBlock</span><span class="p">(</span>
@@ -1526,22 +1483,6 @@ included in the pre-processed input_ids</p></li>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(426, 107)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -1560,22 +1501,6 @@ included in the pre-processed input_ids</p></li>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(3, 4, 4, 4)</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -1587,26 +1512,9 @@ included in the pre-processed input_ids</p></li>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;special_tokens_mask&#39;</span><span class="p">]</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>tensor([0, 0, 0, 0], device=&#39;cuda:1&#39;)</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1624,22 +1532,6 @@ included in the pre-processed input_ids</p></li>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>(torch.Size([4, 128]), torch.Size([4, 128]), torch.Size([4]), torch.Size([4]))</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -1667,25 +1559,6 @@ included in the pre-processed input_ids</p></li>
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;56bfc281a10cfb14005512b8&#39;,
- &#39;56ce0f42aab44d1400b88421&#39;,
- &#39;56bed32f3aeaaa14008c94cf&#39;,
- &#39;56d4d9a92ccc5a1400d832a6&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -1700,61 +1573,6 @@ included in the pre-processed input_ids</p></li>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea ">
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>text</th>
-      <th>found</th>
-      <th>start/end</th>
-      <th>answer</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>How has L.A. Reid described her? Jim Farber of the Daily News and Stephanie Classen of Star Phoenix both praised her strong voice and her stage presence.</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>On what date did Frédéric give his first performance of Piano Concerto No. 2 in F minor, Op. 21? Back in Warsaw that year, Chopin heard Niccolò Paganini play the violin, and composed a set of variations, Souvenir de Paganini. It may have been this experience which encouraged him to commence writing his first Études, (1829–32), exploring the capacities of his own instrument. On 11 August, three weeks after completing his studies at the Warsaw Conservatory, he made his debut in Vienna. He gave two piano concerts and received many</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Together how records have they sold? in recent years. Beyoncé suffered a miscarriage in 2010 or 2011, describing it as "the saddest thing" she had ever endured. She returned to the studio and wrote music in order to cope with the loss. In April 2011, Beyoncé and Jay Z traveled to Paris in order to shoot the album cover for her 4, and unexpectedly became pregnant in Paris.</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>What is the lead single on Beyoncé's first album?Sung Collaboration for "Crazy in Love", and Best R&amp;B Performance by a Duo or Group with Vocals for "The Closer I Get to You" with Luther Vandross.</td>
-      <td>False</td>
-      <td>(0, 0)</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-</div>
-
 </div>
 </div>
 
