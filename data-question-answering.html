@@ -489,8 +489,8 @@ transformers: 4.16.2
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Preprocessing">Preprocessing<a class="anchor-link" href="#Preprocessing"> </a></h2><p>With version 2.0.0 of blurr, we include a <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a> for question answering that can either truncate texts or else chunk long documents into multiple examples.</p>
-<p><strong>Important</strong>: Unlike other NLP tasks in BLURR, extractive question answering <strong><em>requires</em></strong> preprocessing in order to convert our raw start/end character indices into start/end token indices to be used as our labels. We are therefore precluded from figuring them out at batch time since they must be specified as the targets we want to predict.</p>
+<h2 id="Preprocessing">Preprocessing<a class="anchor-link" href="#Preprocessing"> </a></h2><p>With version 2.0.0 of BLURR, we include a <a href="/blurr/data-core.html#Preprocessor"><code>Preprocessor</code></a> for question answering that can either truncate texts or else chunk long documents into multiple examples.</p>
+<p><strong>Note</strong>: Unlike other NLP tasks in BLURR, extractive question answering <strong><em>requires</em></strong> preprocessing in order to convert our raw start/end character indices into start/end token indices unless your dataset includes the later.  Token indicies, rather than character indices, will be used as our targets and are dependent on your tokenizer of choice.</p>
 
 </div>
 </div>
@@ -577,7 +577,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 <span class="n">proc_df</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="o">.</span><span class="n">process_df</span><span class="p">(</span><span class="n">squad_df</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">proc_df</span><span class="p">))</span>
-<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">proc_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -652,7 +652,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>True</td>
     </tr>
     <tr>
-      <th>0</th>
+      <th>1</th>
       <td>56be85543aeaaa14008c9063</td>
       <td>Beyoncé</td>
       <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
@@ -666,6 +666,40 @@ datasets into a single dataset, and will indicate to which each example is assoc
       <td>in Houston, Texas, she performed in various singing and dancing competitions as a child, and ro...</td>
       <td>32</td>
       <td>37</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>56be85543aeaaa14008c9063</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>{'text': ['in the late 1990s'], 'answer_start': [269]}</td>
+      <td>False</td>
+      <td>269</td>
+      <td>in the late 1990s</td>
+      <td>286</td>
+      <td>When did Beyonce start becoming popular?</td>
+      <td>group became one of the world's best-selling girl groups of all time. Their hiatus saw the rele...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>56be85543aeaaa14008c9065</td>
+      <td>Beyoncé</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>{'text': ['singing and dancing'], 'answer_start': [207]}</td>
+      <td>False</td>
+      <td>207</td>
+      <td>singing and dancing</td>
+      <td>226</td>
+      <td>What areas did Beyonce compete in when she was growing up?</td>
+      <td>Beyoncé Giselle Knowles-Carter (/biːˈjɒnseɪ/ bee-YON-say) (born September 4, 1981) is an America...</td>
+      <td>77</td>
+      <td>80</td>
       <td>True</td>
     </tr>
   </tbody>
@@ -744,7 +778,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>680
+<pre>763
 </pre>
 </div>
 </div>
@@ -858,7 +892,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QATextInput" class="doc_header"><code>class</code> <code>QATextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L139" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QATextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
+<h2 id="QATextInput" class="doc_header"><code>class</code> <code>QATextInput</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L155" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QATextInput</code>(<strong><code>x</code></strong>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#TextInput"><code>TextInput</code></a></p>
 </blockquote>
 <p>The base represenation of your inputs; used by the various fastai <code>show</code> methods</p>
 
@@ -896,7 +930,7 @@ datasets into a single dataset, and will indicate to which each example is assoc
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="QABatchTokenizeTransform" class="doc_header"><code>class</code> <code>QABatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L144" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QABatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
+<h2 id="QABatchTokenizeTransform" class="doc_header"><code>class</code> <code>QABatchTokenizeTransform</code><a href="https://github.com/ohmeow/blurr/tree/master/blurr/data/question_answering.py#L160" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>QABatchTokenizeTransform</code>(<strong><code>hf_arch</code></strong>:<code>str</code>, <strong><code>hf_config</code></strong>:<code>PretrainedConfig</code>, <strong><code>hf_tokenizer</code></strong>:<code>PreTrainedTokenizerBase</code>, <strong><code>hf_model</code></strong>:<code>PreTrainedModel</code>, <strong><code>ignore_token_id</code></strong>=<em><code>-100</code></em>, <strong><code>max_length</code></strong>:<code>int</code>=<em><code>None</code></em>, <strong><code>padding</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>True</code></em>, <strong><code>truncation</code></strong>:<code>Union</code>[<code>bool</code>, <code>str</code>]=<em><code>'only_second'</code></em>, <strong><code>is_split_into_words</code></strong>:<code>bool</code>=<em><code>False</code></em>, <strong><code>tok_kwargs</code></strong>:<code>dict</code>=<em><code>{}</code></em>, <strong>**<code>kwargs</code></strong>) :: <a href="/blurr/data-core.html#BatchTokenizeTransform"><code>BatchTokenizeTransform</code></a></p>
 </blockquote>
 <p>Handles everything you need to assemble a mini-batch of inputs and targets, as well as
 decode the dictionary produced as a byproduct of the tokenization process in the <code>encodes</code> method.</p>
@@ -1301,24 +1335,24 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>What type of organism was named after Beyonce in 2012? ation from Destiny Child's "Say My Name" and discussed his relationship with women. In January 2012, research scientist Bryan Lessard named Scaptia beyonceae, a species of horse fly found in Northern Queensland, Australia after Beyoncé due to the fly's unique golden hairs on its abdomen. In July 2014, a Beyoncé exhibit was introduced into the "Legends of Rock" section of the Rock and Roll Hall of Fame. The black leotard from the "Single Ladies" video and her outfit from the Super Bowl half time performance</td>
-      <td>True</td>
-      <td>(55, 56)</td>
-      <td>fly</td>
-    </tr>
-    <tr>
-      <th>2</th>
       <td>What musical comedy did Beyoncé star in along with Cuba Gooding, Jr. in 2003? cé starred opposite Cuba Gooding, Jr., in the musical comedy The Fighting Temptations as Lilly, a single mother whom Gooding's character falls in love with. The film received mixed reviews from critics but grossed $30 million in the U.S. Beyoncé released "Fighting Temptation" as the lead single from the film's soundtrack album, with Missy Elliott, MC Lyte, and Free which was also used to promote the film. Another of Beyoncé's contributions to the soundtrack, "</td>
       <td>True</td>
       <td>(36, 41)</td>
       <td>The Fighting Temptations</td>
     </tr>
     <tr>
+      <th>2</th>
+      <td>Beyonce became the highest-paid black musician in which year? cé and Jay Z placed at number one on the "World's Highest-Paid Celebrity Couples", for collectively earning $78 million. The couple made it into the previous year's Guinness World Records as the "highest-earning power couple" for collectively earning $122 million in 2009. For the years 2009 to 2011, Beyoncé earned an average of $70 million per year, and earned $40 million in 2012. In 2013, Beyoncé's endorsements of Pepsi and H&amp;M made her and Jay Z the world's first billion dollar</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
+    </tr>
+    <tr>
       <th>3</th>
-      <td>Independent Women Part I was on which 2000 film's soundtrack? The remaining band members recorded "Independent Women Part I", which appeared on the soundtrack to the 2000 film, Charlie's Angels. It became their best-charting single, topping the U.S. Billboard Hot 100 chart for eleven consecutive weeks. In early 2001, while Destiny's Child was completing their third album, Beyoncé landed a major role in the MTV made-for-television film, Carmen: A Hip Hopera, starring alongside American actor Mekhi Phifer. Set in Philadelphia, the film is a modern interpretation of the 19th century</td>
-      <td>True</td>
-      <td>(36, 40)</td>
-      <td>Charlie's Angels.</td>
+      <td>Who was the first female to achieve the International Artist Award at the American Music Awards? ifications. Her songs "Crazy in Love", "Single Ladies (Put a Ring on It)", "Halo", and "Irreplaceable" are some of the best-selling singles of all time worldwide. In 2009, The Observer named her the Artist of the Decade and Billboard named her the Top Female Artist and Top Radio Songs Artist of the Decade. In 2010, Billboard named her in their "Top 50 R&amp;B/Hip-Hop Artists of the Past 25 Years" list at number 15. In</td>
+      <td>False</td>
+      <td>(0, 0)</td>
+      <td></td>
     </tr>
   </tbody>
 </table>
@@ -1675,9 +1709,9 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
 
 <div class="output_text output_subarea output_execute_result">
 <pre>[&#39;56be8bab3aeaaa14008c90a1&#39;,
- &#39;56cf54a2aab44d1400b8900a&#39;,
- &#39;56bf97aba10cfb14005511a1&#39;,
- &#39;56bfa5b3a10cfb14005511fb&#39;]</pre>
+ &#39;56cbdbf36d243a140015ed9c&#39;,
+ &#39;56bfe2a2a10cfb1400551369&#39;,
+ &#39;56d4eaca2ccc5a1400d83345&#39;]</pre>
 </div>
 
 </div>
@@ -1729,24 +1763,24 @@ if your inputs are pre-tokenized (not numericalized)</p></li>
     </tr>
     <tr>
       <th>1</th>
-      <td>chopin was active during what era? yk franciszek chopin, [ n 1 ] was a polish and french ( by citizenship and birth of father ) composer and a virtuoso pianist of the romantic era, who wrote primarily for the solo piano. he gained and has maintained renown worldwide as one of the leading musicians of his era, whose " poetic genius was based on a professional technique that was without equal in his generation. " chopin was born in what was then the duchy of warsaw, and grew up in warsaw, which after 1815 became part of congress poland. a child prodigy, he completed his musical education and</td>
-      <td>True</td>
-      <td>(42, 44)</td>
-      <td>romantic era</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>what language did frederic's father, nicolas, insist on using in the household? rzyzanowska, a poor relative of the skarbeks, one of the families for whom he worked. fryderyk was baptized on easter sunday, 23 april 1810, in the same church where his parents had married, in brochow. his eighteen - year - old godfather, for whom he was named, was fryderyk skarbek, a pupil of nicolas chopin. fryderyk was the couple's second child and only son ; he had an elder sister, ludwika ( 1807 –</td>
+      <td>what record company first signed beyonce's group and later cut them? ped and danced on the talent show circuit in houston. after seeing the group, r &amp; b producer arne frager brought them to his northern california studio and placed them in star search, the largest talent show on national tv at the time. girl's tyme failed to win, and beyonce later said the song they performed was not good. in 1995 beyonce's father resigned from his job to manage the group. the move reduced beyonce's family's income by half, and her parents were forced to move into separated apartments. mathew</td>
       <td>False</td>
       <td>(0, 0)</td>
       <td></td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>what was the name of the woman she played in obsessed? nomination for best supporting actress, and a naacp image award nomination for outstanding supporting actress. beyonce donated her entire salary from the film to phoenix house, an organization of rehabilitation centers for heroin addicts around the country. on january 20, 2009, beyonce performed james'" at last " at the first couple's first inaugural ball. beyonce starred opposite ali larter and idris elba in the thriller, obsessed. she played sharon charles, a mother and wife who learns of a woman's obsessive behavior over her husband. although the film received negative reviews</td>
+      <th>2</th>
+      <td>when chopin started to take his music to the world, what is the last name of the person who went with him to austria? sław jachimecki, " into the wide world, with no very clearly defined aim, forever. " with woyciechowski, he headed for austria, intending to go on to italy. later that month, in warsaw, the november 1830 uprising broke out, and woyciechowski returned to poland to enlist. chopin, now alone in vienna, was nostalgic for his homeland, and wrote to a friend, " i curse the moment of my departure. "</td>
       <td>True</td>
-      <td>(99, 101)</td>
-      <td>sharon charles</td>
+      <td>(52, 57)</td>
+      <td>woyciechowski</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>which singer beat out beyonce for best video performance? itated around the world, spawning the " first major dance craze " of the internet age according to the toronto star. the video has won several awards, including best video at the 2009 mtv europe music awards, the 2009 scottish mobo awards, and the 2009 bet awards. at the 2009 mtv video music awards, the video was nominated for nine awards, ultimately winning three including video of the year. its failure to win the best female video category, which went to american country pop singer taylor swift's " you belong with me ", led to kanye west interrupting</td>
+      <td>True</td>
+      <td>(111, 113)</td>
+      <td>taylor swift</td>
     </tr>
   </tbody>
 </table>
