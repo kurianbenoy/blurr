@@ -551,7 +551,7 @@ pip install -e ".[dev]"</code></pre>
 <ul>
 <li>Complete overhaul of documentation for entire library (using <a href="https://github.com/muellerzr/nbverbose">nbverbose</a>)</li>
 <li>Updated all the <a href="https://github.com/fastai/nbdev">nbdev</a> bits and users now have the ability to open <strong><em>any</em></strong> doc in colab (H/T Zach Mueller)</li>
-<li>Added <code>calc_every</code> argument to the <a href="/blurr/modeling-seq2seq-core.html#HF_Seq2SeqMetricsCallback"><code>HF_Seq2SeqMetricsCallback</code></a> so that you can speed up training by NOT calculating the seq2seq metrics on every epoch (this can be time consuming).</li>
+<li>Added <code>calc_every</code> argument to the <code>HF_Seq2SeqMetricsCallback</code> so that you can speed up training by NOT calculating the seq2seq metrics on every epoch (this can be time consuming).</li>
 <li>Misc. bug fixes and addition of other helper methods throughout the library</li>
 </ul>
 <p><strong>08/24/2021</strong> - v0.0.33</p>
