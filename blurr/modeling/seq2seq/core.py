@@ -197,7 +197,15 @@ def seq2seq_splitter(
     """Custom param splitter for summarization models"""
     model = m.hf_model if (hasattr(m, 'hf_model')) else m
 
-    if arch in ['bart', 'blenderbot', 'blenderbot_small', 'fsmt', 'marian', 'mbart', 'pegasus']:
+    if arch in {
+        'bart',
+        'blenderbot',
+        'blenderbot_small',
+        'fsmt',
+        'marian',
+        'mbart',
+        'pegasus',
+    }:
         embeds_modules = [
             model.model.encoder.embed_positions,
             model.model.encoder.embed_tokens,
@@ -210,7 +218,7 @@ def seq2seq_splitter(
         groups = L(embeds, model.model.encoder, model.model.decoder)
         return groups.map(params).filter(lambda el: len(el) > 0)
 
-    if arch in['led']:
+    if arch in {'led'}:
         embeds_modules = [
             model.led.encoder.embed_positions,
             model.led.encoder.embed_tokens,
@@ -222,7 +230,7 @@ def seq2seq_splitter(
         groups = L(embeds, model.led.encoder, model.led.decoder)
         return groups.map(params).filter(lambda el: len(el) > 0)
 
-    if arch in['mt5', 't5']:
+    if arch in {'mt5', 't5'}:
         embeds = nn.Sequential(
             model.shared,
             model.encoder.embed_tokens,
@@ -232,7 +240,7 @@ def seq2seq_splitter(
         groups = L(embeds, model.encoder, model.decoder)
         return groups.map(params).filter(lambda el: len(el) > 0)
 
-    if arch in ['prophetnet', 'xlm_prophetnet']:
+    if arch in {'prophetnet', 'xlm_prophetnet'}:
         embeds = nn.Sequential(
             model.prophetnet.word_embeddings,
             model.prophetnet.encoder.word_embeddings,

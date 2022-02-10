@@ -115,8 +115,11 @@ class BlearnerForTranslation(Blearner):
 
         # not all "summarization" parameters are for the model.generate method ... remove them here
         generate_func_args = list(inspect.signature(hf_model.generate).parameters.keys())
-        for k in text_gen_kwargs.copy():
-            if k not in generate_func_args: del text_gen_kwargs[k]
+        text_gen_kwargs = {
+            k: value
+            for k, value in text_gen_kwargs.items()
+            if k in generate_func_args
+        }
 
         # update our text generation kwargs for mbart
         if (hf_arch == 'mbart'):

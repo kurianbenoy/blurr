@@ -23,7 +23,7 @@ class Singleton:
         self._cls, self._instance = cls, None
 
     def __call__(self, *args, **kwargs):
-        if self._instance == None:
+        if self._instance is None:
             self._instance = self._cls(*args, **kwargs)
         return self._instance
 
@@ -144,8 +144,7 @@ class BlurrUtil:
         if task:
             query.append(f'model_task == "{task}"')
 
-        models = sorted(self._df.query(" & ".join(query)).class_name.tolist())
-        return models
+        return sorted(self._df.query(" & ".join(query)).class_name.tolist())
 
     def get_model_architecture(self, model_name_or_enum):
         """Get the architecture for a given model name / enum"""

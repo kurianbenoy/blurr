@@ -183,7 +183,7 @@ class OverflowDL(SortedDL):
             self.it = iter(self.dataset)
         res = filter(lambda o: o is not None, map(self.do_item, samps))
 
-        for b in map(self.do_batch, self.chunkify(res)):
+        for _ in map(self.do_batch, self.chunkify(res)):
             while self._n_batch_items() >= self.bs:
                 yield self._get_batch()
 
@@ -361,7 +361,9 @@ class BlurrBatchCreator:
         data_collator: Type = None,
     ):
         self.hf_tokenizer = hf_tokenizer
-        self.data_collator = data_collator if (data_collator) else DataCollatorWithPadding(tokenizer=hf_tokenizer)
+        self.data_collator = data_collator or DataCollatorWithPadding(
+            tokenizer=hf_tokenizer
+        )
 
     def __call__(self, features):  # A mini-batch (list of examples to run through your model)
         """This method will collate your data using `self.data_collator` and add a target element to the
@@ -534,9 +536,9 @@ def first_blurr_tfm(
     `show_batch` and `show_results`. The returned transform should have everything you need to properly
     decode and 'show' your Hugging Face inputs/targets
     """
-    # try our befor_batch tfms (this will be used if you're using the mid-level DataBlock API)
-    tfm = get_blurr_tfm(dls.before_batch, tfm_class=before_batch_tfm_class)
-    if tfm:
+    if tfm := get_blurr_tfm(
+        dls.before_batch, tfm_class=before_batch_tfm_class
+    ):
         return tfm
 
     # try our after_batch tfms (this will be used if you're using the low-level Blurr data API)
