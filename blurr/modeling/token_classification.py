@@ -309,11 +309,9 @@ class BlearnerForTokenClassification(Blearner):
         # build getters
         if (isinstance(data, pd.DataFrame)):
             get_x = ColReader(tokens_attr)
-            get_y = partial(cls._get_y, tokens=tokens_attr, token_labels=token_labels_attr, tokenizer=hf_tokenizer)
         else:
             get_x = ItemGetter(tokens_attr)
-            get_y = partial(cls._get_y, tokens=tokens_attr, token_labels=token_labels_attr, tokenizer=hf_tokenizer)
-
+        get_y = partial(cls._get_y, tokens=tokens_attr, token_labels=token_labels_attr, tokenizer=hf_tokenizer)
         before_batch_tfm = HF_TokenClassBeforeBatchTransform(hf_arch, hf_config, hf_tokenizer, hf_model,
                                                              is_split_into_words=True,
                                                              tok_kwargs={ 'return_special_tokens_mask': True })
@@ -358,7 +356,16 @@ class BlearnerForTokenClassification(Blearner):
     ):
         # we need to tell transformer how many labels/classes to expect
         if (labels is None):
-            labels = sorted(list(set([lbls for sublist in df[token_labels_attr].tolist() for lbls in sublist])))
+            labels = sorted(
+                list(
+                    {
+                        lbls
+                        for sublist in df[token_labels_attr].tolist()
+                        for lbls in sublist
+                    }
+                )
+            )
+
 
         return cls._create_learner(df, pretrained_model_name_or_path, preprocess_func,
                                    tokens_attr, token_labels_attr, labels, dblock_splitter,

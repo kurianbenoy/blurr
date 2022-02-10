@@ -447,7 +447,12 @@ class BlearnerForSequenceClassification(Blearner):
     ):
         # we need to tell transformer how many labels/classes to expect
         if n_labels is None:
-            n_labels = len(label_attr) if (is_listy(label_attr)) else len(set([item[label_attr] for item in ds]))
+            n_labels = (
+                len(label_attr)
+                if (is_listy(label_attr))
+                else len({item[label_attr] for item in ds})
+            )
+
 
         return cls._create_learner(
             ds, pretrained_model_name_or_path, preprocess_func, text_attr, label_attr, n_labels, dblock_splitter, dl_kwargs, learner_kwargs

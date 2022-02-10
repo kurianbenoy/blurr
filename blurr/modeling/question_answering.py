@@ -76,12 +76,10 @@ class MultiTargetLoss(Module):
         return loss
 
     def activation(self, outs):
-        acts = [ self.loss_funcs[i].activation(o) for i, o in enumerate(outs) ]
-        return acts
+        return [ self.loss_funcs[i].activation(o) for i, o in enumerate(outs) ]
 
     def decodes(self, outs):
-        decodes = [ self.loss_funcs[i].decodes(o) for i, o in enumerate(outs) ]
-        return decodes
+        return [ self.loss_funcs[i].decodes(o) for i, o in enumerate(outs) ]
 
 
 # Cell

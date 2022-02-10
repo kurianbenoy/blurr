@@ -30,12 +30,14 @@ class HF_Seq2SeqInput(HF_BaseInput): pass
 
 # Cell
 def default_text_gen_kwargs(hf_config, hf_model, task=None):
-    text_gen_kwargs = {}
     hf_config_dict = hf_config.to_dict()
 
     generate_func_args = list(inspect.signature(hf_model.generate).parameters.keys())
-    for k in generate_func_args:
-        if (k in hf_config_dict): text_gen_kwargs.update({k: hf_config_dict[k]})
+    text_gen_kwargs = {
+        k: hf_config_dict[k]
+        for k in generate_func_args
+        if (k in hf_config_dict)
+    }
 
     # not all configs even have a task_specific_params property
     if (task is not None):
@@ -119,10 +121,14 @@ class HF_Seq2SeqBeforeBatchTransform(HF_BeforeBatchTransform):
 
         # update samples with tokenized inputs (e.g. input_ids, attention_mask, etc...)
         d_keys = tok_d.keys()
-        updated_samples= [ (*[{k: tok_d[k][idx] for k in d_keys}], *tuplify(targ_ids[idx]), *sample[2:])
-                          for idx, sample in enumerate(samples) ]
-
-        return updated_samples
+        return [
+            (
+                *[{k: tok_d[k][idx] for k in d_keys}],
+                *tuplify(targ_ids[idx]),
+                *sample[2:],
+            )
+            for idx, sample in enumerate(samples)
+        ]
 
 # Cell
 class HF_Seq2SeqAfterBatchTransform(HF_AfterBatchTransform):
